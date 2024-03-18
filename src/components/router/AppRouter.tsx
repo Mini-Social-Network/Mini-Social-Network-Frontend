@@ -50,7 +50,8 @@ export const AppRouter: React.FC = () => {
       <MainLayout />
     </RequireAuth>
   );
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('UserData') || '')?.topicId);
+  const UserDataNew = localStorage.getItem('UserData');
+  const [userInfo, setUserInfo] = useState(UserDataNew ? JSON.parse(UserDataNew)?.topicId : '');
   useEffect(() => {
     const UserData = localStorage.getItem('UserData');
     const UserInfo = JSON.parse(UserData);
@@ -65,26 +66,26 @@ export const AppRouter: React.FC = () => {
     let action = '';
     switch (actionSender.action) {
       case 'post-like':
-        action = 'like your post';
+        action = 'thích bài viết';
         break;
       case 'post-comment':
-        action = 'comment your post';
+        action = 'bình luận bài viết';
         break;
       case 'request-friend':
-        action = 'Send Request Friend';
+        action = 'gửi lời mời kết bạn';
         break;
       case 'accept-friend':
-        action = 'Accept Friend';
+        action = 'chấp nhận lời mời kết bạn';
         break;
-      case 'subscribed':
-        action = 'Subscribed';
+      case 'subscriber':
+        action = 'đăng ký';
         break;
       default:
         break;
     }
 
     notificationController.success({
-      message: `${senderInfo.name} Had ${action} ${body.user.name}`,
+      message: `${senderInfo.name} đã ${action} của bạn ${body.user.name}`,
     });
   });
   return (
