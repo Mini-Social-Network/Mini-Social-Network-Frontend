@@ -4,8 +4,6 @@ import chatService from './ChatService';
 import ChatInput from './ChatInput';
 import { v4 as uuidv4 } from 'uuid';
 import loading from '@app/assets/loader.gif';
-import moment from 'moment';
-import 'moment/locale/vi';
 import {
   StompSessionProvider,
   useStompClient,
@@ -21,6 +19,7 @@ interface ChatContainerProps {
   currentUser: User | undefined;
   socket: any;
   topicContactId: any;
+  handleChatUpdate: any;
 }
 export interface Message {
   fromSelf: boolean;
@@ -41,22 +40,12 @@ export interface User {
   topicId: string;
 }
 
-const ChatContainer: React.FC<ChatContainerProps> = ({ currentChat, currentUser, socket }) => {
+const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, currentChat, currentUser, socket }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<Message>();
   const [isLoading, setIsLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const stompClient = useStompClient();
-
-  function daysIntoYear(date: Date) {
-    return (
-      (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) /
-      24 /
-      60 /
-      60 /
-      1000
-    );
-  }
 
   useEffect(() => {
     const getMsg = async () => {
@@ -111,7 +100,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ currentChat, currentUser,
 
   const handleSendMessage = async (msg: string, image: string) => {
     console.log(image, msg);
-
+    handleChatUpdate(true);
     if (currentUser) {
       if (stompClient) {
         //Send Message
@@ -163,60 +152,35 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ currentChat, currentUser,
         </div>
       ) : (
         <div className="chat-messages">
-          {messages?.map((message, index, messages) => {
-            const dateCurrentMessage = new Date(message.createAt);
-            const dateNow = new Date();
-            let isPaging = false;
-            let timeDeplay = '';
-            if (index > 0) {
-              const datePreviousMessage = new Date(messages[index - 1].createAt);
-              isPaging = dateCurrentMessage.getTime() - datePreviousMessage.getTime() >= 7200000;
-            }
-            if (isPaging) {
-              const nowDay = daysIntoYear(dateNow);
-              const currentMessageDay = daysIntoYear(dateCurrentMessage);
-              if (nowDay - currentMessageDay == 0) {
-                timeDeplay = moment(dateCurrentMessage).locale('vi').format('hh:mm');
-              } else if (nowDay - currentMessageDay > 0 && nowDay - currentMessageDay <= 7) {
-                timeDeplay = moment(dateCurrentMessage).locale('vi').format('dddd hh:mm');
-              } else {
-                timeDeplay = moment(dateCurrentMessage).locale('vi').format('hh:mm, DD MMMM YYYY');
-              }
-            }
+          {messages?.map((message) => {
             if (message.isFile) {
               return (
-                <>
-                  <div style={{ margin: 'auto', padding: '5px 0' }}>{isPaging && timeDeplay}</div>
-                  <div ref={scrollRef} key={uuidv4()}>
-                    <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
-                      {message.content && (
-                        <div className="content-image">
-                          <img src={`http://localhost:8081/local-store/${message.content}`} alt="sended" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              );
-            }
-            return (
-              <>
-                <div style={{ margin: 'auto', padding: '5px 0' }}>{isPaging && timeDeplay}</div>
                 <div ref={scrollRef} key={uuidv4()}>
                   <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
                     {message.content && (
-                      <div className="content ">
-                        <p>{message.content}</p>
-                      </div>
-                    )}
-                    {message.image && (
                       <div className="content-image">
-                        <img src={message.image} alt="sended" />
+                        <img src={`http://localhost:8081/local-store/${message.content}`} alt="sended" />
                       </div>
                     )}
                   </div>
                 </div>
-              </>
+              );
+            }
+            return (
+              <div ref={scrollRef} key={uuidv4()}>
+                <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
+                  {message.content && (
+                    <div className="content ">
+                      <p>{message.content}</p>
+                    </div>
+                  )}
+                  {message.image && (
+                    <div className="content-image">
+                      <img src={message.image} alt="sended" />
+                    </div>
+                  )}
+                </div>
+              </div>
             );
           })}
         </div>

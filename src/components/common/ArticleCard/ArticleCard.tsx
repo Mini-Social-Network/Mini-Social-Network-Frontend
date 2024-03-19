@@ -18,8 +18,6 @@ import {
 } from '@ant-design/icons';
 import dbService from '@app/pages/DashBoard/DashBoardService';
 import Meta from 'antd/lib/card/Meta';
-import moment from 'moment';
-import 'moment/locale/vi';
 interface ArticleCardProps {
   idPost: number;
   author?: React.ReactNode;
@@ -138,7 +136,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </S.UserName>
           </S.InfoAvt>
           <S.InfoHeader>
-            <S.Description>{moment(new Date(date)).locale('vi').format('lll')}</S.Description>
+            <S.Description>{date}</S.Description>
           </S.InfoHeader>
         </S.Header>
         <S.InfoWrapper>
@@ -196,7 +194,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </S.Reaction>
         </S.ReactionWrapper>
       </S.Wrapper>
-      <Modal visible={openPost} onCancel={() => setOpenPost(false)} width={700}>
+
+      <Modal visible={openPost} onCancel={() => setOpenPost(false)} width={700} footer={[<></>]}>
         <>
           <S.WrapperOnloadCmt className={className}>
             <S.Header>
@@ -248,14 +247,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                 >
                   <Meta
                     avatar={<Avatar src={`http://localhost:8081/local-store/${item.userId.imageUrl}`} />}
-                    title={
-                      <>
-                        {item.userId.name}
-                        <p style={{ marginRight: '5px', fontSize: '0.75rem' }}>
-                          {moment(new Date(item.createAt)).locale('vi').format('lll')}
-                        </p>
-                      </>
-                    }
+                    title={item.userId.name}
                   />
                   {item.comemntParent && (
                     <S.CardCmt
@@ -268,23 +260,13 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                       }}
                       bodyStyle={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
                     >
-                      <Meta
-                        style={{ fontSize: '0.75rem' }}
-                        title={
-                          <>
-                            {item.comemntParent.userId.name}
-                            <p style={{ marginRight: '5px', fontSize: '0.75rem' }}>
-                              {moment(new Date(item.comemntParent.createAt)).locale('vi').format('lll')}
-                            </p>
-                          </>
-                        }
-                      />
-                      <p style={{ marginTop: '2%', fontSize: '1rem', marginBottom: '0em' }}>
+                      <Meta style={{ fontSize: '0.75rem' }} title={item.comemntParent.userId.name} />
+                      <p style={{ marginTop: '2%', fontSize: '0.9rem', marginBottom: '0em' }}>
                         {item.comemntParent.content}
                       </p>
                     </S.CardCmt>
                   )}
-                  <p style={{ marginTop: '2%', marginLeft: '10%', fontSize: '1rem' }}>{item.content}</p>
+                  <p style={{ marginTop: '2%', marginLeft: '10%', fontSize: '0.9rem' }}>{item.content}</p>
                   {reply === item.id ? null : (
                     <Button
                       style={{ marginLeft: '10%' }}
