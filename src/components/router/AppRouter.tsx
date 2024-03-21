@@ -25,6 +25,7 @@ import TopicManager from '@app/pages/TopicManager/TopicManager';
 import AccessRoleManager from '@app/pages/FindPostPage/FindPost';
 import FindPost from '@app/pages/FindPostPage/FindPost';
 import PostDetail from '@app/pages/FindPostPage/PostDetail';
+import AnoPage from '@app/pages/DashboardPagesAno/AnoPage';
 const DataTablesPage = React.lazy(() => import('@app/pages/DataTablesPage'));
 const ChartsPage = React.lazy(() => import('@app/pages/ChartsPage'));
 const ServerErrorPage = React.lazy(() => import('@app/pages/ServerErrorPage'));
@@ -95,6 +96,7 @@ export const AppRouter: React.FC = () => {
         </Route>
         <Route path="/logout" element={<LogoutFallback />} />
         <Route path="*" element={<Error404 />} />
+        <Route path="noauth" element={<AnoPage />} />
       </Routes>
     </BrowserRouter>
   );
