@@ -68,7 +68,7 @@ export const AppRouter: React.FC = () => {
           <Route path="profile-page/:id" element={<Profile />} />
           <Route path="chat-center" element={<ChatPage />} />
           <Route path="detail" element={<PostDetail />} />
-          
+
           <Route path="find-post-page" element={<FindPost />} />
           <Route path="dashboard" element={<Dashboard />} />
 
@@ -90,6 +90,7 @@ export const AppRouter: React.FC = () => {
               </RequireAuth>
             }
           />
+
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="security-code" element={<SecurityCodePage />} />
           <Route path="new-password" element={<NewPasswordPage />} />
