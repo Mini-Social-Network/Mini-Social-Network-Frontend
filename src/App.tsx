@@ -25,9 +25,7 @@ const App: React.FC = () => {
 
   usePWA();
 
-  useAutoNightMode();
 
-  useThemeWatcher();
   useEffect(() => {
     const UserData = localStorage.getItem('UserData');
     const UserInfo = JSON.parse(UserData);

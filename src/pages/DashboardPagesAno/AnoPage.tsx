@@ -58,9 +58,9 @@ const AnoPage: React.FC = () => {
           <Link to="/auth/login">Login</Link>
         </Button>
       </Row>
-      <s.Card bodyStyle={{ height: '61.5rem', padding: '20px 60px' }}>
-        <Row>
-          <Col span={10}>
+      <s.Card bodyStyle={{ height: '60.3rem', padding: '20px 60px' }}>
+      <Row  justify="end">
+          <Col span={9}>
             <Carousel autoplay>
               {experts?.map((expert) => {
                 return (
@@ -68,7 +68,7 @@ const AnoPage: React.FC = () => {
                     <s.Wrapper>
                       <s.ImgWrapper>
                         <img
-                          src={expert.imageUrl ? `http://149.51.37.29:8081/local-store/${expert.imageUrl}` : dfavt}
+                          src={expert.imageUrl ? `http://localhost:8081/local-store/${expert.imageUrl}` : dfavt}
                           alt={`title ${expert.imageUrl ? expert.imageUrl : 'dfavt'}`}
                           width={150}
                           height={150}
@@ -112,7 +112,7 @@ const AnoPage: React.FC = () => {
                         <s.ImgWrapper>
                           {post.imageList?.map((img: string) => (
                             <Image
-                              src={`http://149.51.37.29:8081/local-store/${img}`}
+                              src={`http://localhost:8081/local-store/${img}`}
                               alt={`title ${img ? img : 'dfavt'}`}
                               width={100}
                               height={100}
@@ -141,7 +141,7 @@ const AnoPage: React.FC = () => {
                         <s.ImgWrapper>
                           {post.imageList?.map((img: string) => (
                             <Image
-                              src={`http://149.51.37.29:8081/local-store/${img}`}
+                              src={`http://localhost:8081/local-store/${img}`}
                               alt={`title ${img ? img : 'dfavt'}`}
                               width={100}
                               height={100}
@@ -171,7 +171,7 @@ const AnoPage: React.FC = () => {
                         <s.ImgWrapper>
                           {post.imageList?.map((img: string) => (
                             <Image
-                              src={`http://149.51.37.29:8081/local-store/${img}`}
+                              src={`http://localhost:8081/local-store/${img}`}
                               alt={`title ${img ? img : 'dfavt'}`}
                               width={100}
                               height={100}
@@ -194,7 +194,7 @@ const AnoPage: React.FC = () => {
               </Panel>
             </Collapse>
           </Col>
-          <Col span={14} style={{ height: '61.5rem', display: 'flex', justifyContent: 'center' }}>
+          <Col span={14} style={{ height: '60.3rem', display: 'flex', justifyContent: 'center' }}>
             <AnoScroll activity={contacts} hasMore={hasMore} next={next} />
           </Col>
         </Row>
