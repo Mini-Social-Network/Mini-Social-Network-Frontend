@@ -12,11 +12,13 @@ import moment from 'moment';
 import { ColumnsType } from 'antd/es/table';
 import Panel from 'rc-color-picker/lib/Panel';
 import { Card } from 'components/common/Card/Card';
+import { notificationController } from '@app/controllers/notificationController';
+import InputColor from './InputColor';
 
 const TopicManager: React.FC = () => {
   const { t } = useTranslation();
   const [topicsData, setTopicsData] = useState<any>([]);
-
+  const [topicsSelected, setTopicsSelected] = useState<any>(null);
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
@@ -104,13 +106,18 @@ const TopicManager: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const resData: any = [];
-
     setIsPending(false);
 
     TopicService.GetTopics('').then((data: any) => {
+      const resData: any = [];
       if (data.status === 1) {
-        setTopicsData(data.data);
+        data.data.forEach((item: any) => {
+          resData.push({
+            ...item,
+            key: item.id,
+          });
+        });
+        setTopicsData(resData);
         setIsLoading(false);
       }
     });
@@ -119,49 +126,102 @@ const TopicManager: React.FC = () => {
     setIsOpenAdd(false);
     formAdd.resetFields();
   };
-  const onFinishAdd = () => {
-    0;
-
-    OrderService.insertOrder(data).then((res: any) => {
-      if (res.status === 'success') {
+  const onFinishAdd = (value: any) => {
+    const tagName = value.tagName;
+    const color = value.color.color;
+    TopicService.AddTopics({ tagName: tagName, color: color }).then((res: any) => {
+      if (res.status === 1) {
         notificationController.success({
-          message: 'Add Order Success',
+          message: 'Thêm chủ đề thành công',
         });
-        ListData.splice(index, 1);
-        setChannelAddData((prevState: any) => {
-          const newState = prevState.map((obj: any) => {
-            if (data.channel_id === obj.channel_id) {
-              return { ...obj, state: 1 };
-            }
-
-            return obj;
-          });
-
-          return newState;
+        setIsLoading(true);
+        setIsPending(false);
+        onCloseModelAdd();
+        TopicService.GetTopics('').then((data: any) => {
+          const resData: any = [];
+          if (data.status === 1) {
+            data.data.forEach((item: any) => {
+              resData.push({
+                ...item,
+                key: item.id,
+              });
+            });
+            setTopicsData(resData);
+            setIsLoading(false);
+          }
         });
       }
     });
   };
 
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      selectedRows.forEach((item: any) => {
+        const temp = topicsData.find((x: any) => x.id === item.id);
+        setTopicsSelected(temp);
+      });
+    },
+    getCheckboxProps: (record: any) => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
+  const onCloseModelUpdate = () => {
+    setIsOpenEdit(false);
+    form.resetFields();
+  };
+  const onFinishUpdate = (value: any) => {
+    const tagName = value?.tagName ? value.tagName : topicsSelected.tagName;
+    const color = value?.color?.color ? value.color.color : topicsSelected.color;
+    TopicService.UpdateTopics({ id: topicsSelected.id, tagName: tagName, color: color }).then((res: any) => {
+      if (res.status === 1) {
+        notificationController.success({
+          message: 'Cập nhập chủ đề thành công',
+        });
+        setIsLoading(true);
+        setIsPending(false);
+        onCloseModelUpdate();
+        TopicService.GetTopics('').then((data: any) => {
+          const resData: any = [];
+          if (data.status === 1) {
+            data.data.forEach((item: any) => {
+              resData.push({
+                ...item,
+                key: item.id,
+              });
+            });
+            setTopicsData(resData);
+            setIsLoading(false);
+          }
+        });
+      }
+    });
+  };
   return (
     <>
-      <PageTitle>Trang quản lý Topic</PageTitle>
+      <PageTitle>Trang quản lý Chủ đề</PageTitle>
       <s.TablesWrapper>
         <s.Card
-          title={'Quản lý Topic'}
+          title={'Quản lý Chủ đề'}
           extra={
             !isPending ? (
               <div style={{ display: 'flex' }}>
                 {admin ? (
                   <Button severity="success" onClick={() => setIsOpenAdd(true)}>
-                    {t('common.add')}
+                   Thêm
                   </Button>
                 ) : (
                   <div />
                 )}
                 {admin ? (
-                  <Button severity="info" style={{ marginLeft: '15px' }} onClick={() => setIsOpenEdit(true)}>
-                    {t('common.edit')}
+                  <Button
+                    severity="info"
+                    style={{ marginLeft: '15px' }}
+                    onClick={() => setIsOpenEdit(true)}
+                    disabled={topicsSelected === null}
+                  >
+                    Cập nhập
                   </Button>
                 ) : (
                   <div />
@@ -174,59 +234,81 @@ const TopicManager: React.FC = () => {
         >
           <Row style={{ width: '100%', marginTop: '10px' }}>
             <Col md={24}>
-              <Table dataSource={topicsData} columns={UserColumns} scroll={{ x: 1500 }} loading={isLoading} />
+              <Table
+                dataSource={topicsData}
+                columns={UserColumns}
+                scroll={{ x: 1500 }}
+                loading={isLoading}
+                rowSelection={{
+                  type: 'radio',
+                  ...rowSelection,
+                }}
+              />
             </Col>
           </Row>
         </s.Card>
       </s.TablesWrapper>
-      <Modal
-        title={t('common.add') + ' ' + t('common.order')}
-        visible={isOpenAdd}
-        onCancel={() => onCloseModelAdd()}
-        width={1000}
-        footer={[
-          <>
-            <Button style={{ display: 'inline' }} onClick={() => onCloseModelAdd()}>
-              {t('common.close')}
-            </Button>
+      <Modal title={'Thêm Chủ đề'} visible={isOpenAdd} onCancel={() => onCloseModelAdd()} width={1000} footer={null}>
+        <Form
+          name="addTopic"
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 16 }}
+          form={formAdd}
+          onFinish={(value) => onFinishAdd(value)}
+        >
+          <Form.Item label={'Tên'} name="tagName" required>
+            <Input style={{ width: '100%' }} required />
+          </Form.Item>
+          <Form.Item label={'Màu'} name="color" required>
+            <InputColor />
+          </Form.Item>
 
-            <Button
-              style={{ display: 'inline' }}
-              type="primary"
-              className="btn btn-primary"
-              form="addTopic"
-              onClick={() => onFinishAdd()}
-            >
-              {t('common.AddList')}
-            </Button>
-          </>,
-        ]}
-      >
-        <Form name="addTopic" labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} form={formAdd}>
-          <Form.Item label={t('common.channel_id')} name="channel_id" required>
-            <Input style={{ width: '100%' }} required />
-          </Form.Item>
-          <Form.Item label={t('common.priority')} name="priority"></Form.Item>
-          <Form.Item label={t('common.subscribe_need')} name="sub_need" required>
-            <InputNumber style={{ width: '100%' }} min={0} required />
-          </Form.Item>
-          <Form.Item label={t('common.note')} name="note" required>
-            <Input style={{ width: '100%' }} required />
-          </Form.Item>
-          <Form.Item name="btn" required style={{ float: 'right' }}>
-            <Button
-              style={{ display: 'inline' }}
-              type="primary"
-              className="btn btn-primary"
-              form="addOrder"
-              key="submit"
-              htmlType="submit"
-            >
-              {t('common.add')}
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button type="primary" htmlType="submit">
+              Thêm
             </Button>
           </Form.Item>
         </Form>
       </Modal>
+      {topicsSelected && (
+        <Modal
+          title={'Cập nhập Chủ đề'}
+          visible={isOpenEdit}
+          onCancel={() => onCloseModelUpdate()}
+          footer={[
+            <>
+              <Button style={{ display: 'inline' }} onClick={() => onCloseModelUpdate()}>
+               Đóng
+              </Button>
+              <Button
+                style={{ display: 'inline' }}
+                type="primary"
+                className="btn btn-primary"
+                form="updateOrder"
+                key="submit"
+                htmlType="submit"
+              >
+                Cập nhập
+              </Button>
+            </>,
+          ]}
+        >
+          <Form
+            name="updateOrder"
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 16 }}
+            onFinish={(value) => onFinishUpdate(value)}
+            form={form}
+          >
+            <Form.Item label={'Tên'} name="tagName" required>
+              <Input style={{ width: '100%' }} required defaultValue={topicsSelected.tagName} />
+            </Form.Item>
+            <Form.Item label={'Màu'} name="color" required>
+              <InputColor color={topicsSelected.color} />
+            </Form.Item>
+          </Form>
+        </Modal>
+      )}
     </>
   );
 };
