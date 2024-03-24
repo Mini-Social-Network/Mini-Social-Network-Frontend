@@ -50,7 +50,7 @@ export const RecentActivityItem: React.FC<Activity> = ({
                 unfriend(id);
               }}
             >
-              Huỷ Kết Bạn
+              {t('mini.unfr')}
             </Button>
           ) : (
             <WrapperBtn>
@@ -61,7 +61,7 @@ export const RecentActivityItem: React.FC<Activity> = ({
                   acpfriend(id);
                 }}
               >
-                Chấp nhận
+                {t('mini.acptfr')}
               </Button>
               <Button
                 size={'small'}
@@ -70,7 +70,7 @@ export const RecentActivityItem: React.FC<Activity> = ({
                 }}
                 danger
               >
-                Xoá
+                {t('mini.cancel')}
               </Button>
             </WrapperBtn>
           )}

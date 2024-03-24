@@ -49,7 +49,7 @@ export const ListFriendItem: React.FC<Activity> = ({
               cancelacpfriend(id);
             }}
           >
-            Huỷ lời mời
+            {t('mini.cancel')}
           </Button>
         );
       case 2:
@@ -60,7 +60,7 @@ export const ListFriendItem: React.FC<Activity> = ({
               unfriend(id);
             }}
           >
-            Huỷ kết bạn
+            {t('mini.unfr')}
           </Button>
         );
       case 3:
@@ -73,7 +73,7 @@ export const ListFriendItem: React.FC<Activity> = ({
                 acpfriend(id);
               }}
             >
-              Chấp nhận
+              {t('mini.acptfr')}
             </Button>
             <Button
               size={'small'}
@@ -82,7 +82,7 @@ export const ListFriendItem: React.FC<Activity> = ({
               }}
               danger
             >
-              Xoá
+              {t('mini.cancel')}
             </Button>
           </>
         );
@@ -96,7 +96,7 @@ export const ListFriendItem: React.FC<Activity> = ({
               addfriend(id);
             }}
           >
-            Kết bạn
+            {t('mini.addfr')}
           </Button>
         );
     }
@@ -153,7 +153,7 @@ export const ListFriendItem: React.FC<Activity> = ({
                 }
               }}
             >
-              Chat
+              {t('mini.chat')}
             </Button>
           </s.InfoHeaderWrapper>
         </s.InfoWrapper>
@@ -167,7 +167,7 @@ export const ListFriendItem: React.FC<Activity> = ({
               subexpert(id);
             }}
           >
-            {isSubcribed ? 'Huỷ Đăng ký' : 'Đăng ký'}
+            {isSubcribed ? t('mini.unsub') : t('mini.sub')}
           </Button>
         ) : null}
         {isExpert ? (
@@ -187,7 +187,7 @@ export const ListFriendItem: React.FC<Activity> = ({
               addfriend(id);
             }}
           >
-            Kết bạn
+            {t('mini.addfr')}
           </Button>
         )}
       </s.WrapperBtn>

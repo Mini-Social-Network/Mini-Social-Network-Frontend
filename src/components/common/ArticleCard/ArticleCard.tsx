@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Dates } from '@app/constants/Dates';
-import { Avatar, Button, Card, Image, Input, Modal } from 'antd';
-import { Tag, ITag } from '../Tag/Tag';
+import React, { useState } from 'react';
+import { Avatar, Button, Image, Input, Modal } from 'antd';
+import { Tag } from '../Tag/Tag';
 import * as S from './ArticleCard.styles';
 import dfavt from '@app/share/dfavt.png';
-import ConfigSetting from './ArticleCardService';
 import {
   CheckCircleTwoTone,
   CommentOutlined,
   DislikeOutlined,
   DislikeTwoTone,
-  HeartOutlined,
   LikeOutlined,
   LikeTwoTone,
   SendOutlined,
-  ShareAltOutlined,
 } from '@ant-design/icons';
 import dbService from '@app/pages/DashBoard/DashBoardService';
 import Meta from 'antd/lib/card/Meta';
@@ -61,13 +57,13 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   isLike,
   isDisLike,
 }) => {
-  const [isLiked, setIsLiked] = useState<boolean>(isLike);
-  const [isDisLiked, setIsDisLiked] = useState<boolean>(isDisLike);
-  const [isLikedCount, setIsLikedCount] = useState<number>(likeCount);
-  const [isDisLikedCount, setIsDisLikedCount] = useState<number>(disLikeCount);
+  const [isLiked, setIsLiked] = useState<boolean>(isLike ?? 0);
+  const [isDisLiked, setIsDisLiked] = useState<boolean>(isDisLike ?? 0);
+  const [isLikedCount, setIsLikedCount] = useState<number>(likeCount ?? 0);
+  const [isDisLikedCount, setIsDisLikedCount] = useState<number>(disLikeCount ?? 0);
   const [openPost, setOpenPost] = useState<boolean>(false);
   const [comment, setComment] = useState<string>('');
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [reply, setReply] = useState(null);
   const CallLike = (id: number) => {
     dbService.callLike(id);
@@ -106,7 +102,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       })
       .then((data: any) => {
         if (data.data !== null) {
-          setComments([data.data, ...comments]);
+          const newData: any[] = [data.data, ...comments];
+          setComments(newData);
         }
         setComment('');
       });
@@ -121,7 +118,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       })
       .then((data: any) => {
         if (data.data !== null) {
-          setComments([data.data, ...comments]);
+          const newData: any[] = [data.data, ...comments];
+          setComments(newData);
         }
         setComment('');
         setReply(null);
@@ -234,10 +232,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                   alt="article"
                   preview={false}
                   style={{ objectFit: 'contain', width: '90%' }}
+                  height={500}
                 />
               ))}
             </S.ImageWrap2>
-            {comments.map((item: any) => {
+            {comments.map((item: any, index) => {
               return (
                 <S.CardCmt
                   style={{
@@ -245,6 +244,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                     boxShadow: 'rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px',
                     margin: '1%',
                   }}
+                  key={index}
                   bodyStyle={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
                 >
                   <Meta

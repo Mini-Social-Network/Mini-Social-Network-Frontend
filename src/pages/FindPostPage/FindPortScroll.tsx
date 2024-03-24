@@ -6,6 +6,7 @@ import { NotFound } from '@app/components/common/NotFound/NotFound';
 import { Col, Row, Spin, Image } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface RecentActivityFeedProps {
   activity: any[];
@@ -15,12 +16,13 @@ interface RecentActivityFeedProps {
 
 const FindPortScroll: React.FC<RecentActivityFeedProps> = ({ activity, hasMore, next }) => {
   const navigate = useNavigate();
+
   const activityItems = useMemo(
     () =>
       activity?.map((item, index) => {
         console.log(activity);
         return (
-          <Col className="gutter-row" span={12} md={12} xs={24}>
+          <Col className="gutter-row" span={12} md={12} xs={24} key={index}>
             <Col span={24}>
               <s.ActivityCard
                 bodyStyle={{ padding: '0px  10px' }}
@@ -39,6 +41,7 @@ const FindPortScroll: React.FC<RecentActivityFeedProps> = ({ activity, hasMore, 
                         width={100}
                         height={100}
                         preview={false}
+                        key={img}
                       />
                     ))}
                   </s.ImgWrapper>

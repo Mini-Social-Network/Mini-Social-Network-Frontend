@@ -28,6 +28,7 @@ const ListFriendPage: React.FC = () => {
   const [keyword, setKeyWord] = useState<string>('');
   const UserDataNew = localStorage.getItem('UserData');
   const [userInfo, setUserInfo] = useState(UserDataNew ? JSON.parse(UserDataNew)?.topicId : '');
+  const { t } = useTranslation();
   useEffect(() => {
     if (filters.status.length > 0) {
       setFilteredActivity(contacts.filter((item) => filters.status.some((filter: any) => filter === item.status)));
@@ -159,10 +160,10 @@ const ListFriendPage: React.FC = () => {
   });
   return (
     <>
-      <PageTitle>Cộng đồng</PageTitle>
+      <PageTitle>{t('mini.comunication')}</PageTitle>
 
-      <s.Card title="Cộng đồng" bodyStyle={{ height: '48rem', padding: '20px 60px' }}>
-        <Search style={{ width: '30%' }} placeholder="Tìm kiếm người dùng" enterButton onSearch={onSearch} />
+      <s.Card title={t('mini.comunication')} bodyStyle={{ height: '48rem', padding: '20px 60px' }}>
+        <Search style={{ width: '30%' }} placeholder={t('mini.findUser')} enterButton onSearch={onSearch} />
         <ListFriendScroll
           activity={contacts}
           hasMore={hasMore}

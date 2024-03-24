@@ -163,43 +163,34 @@ export const UpdateInfor: React.FC<DBProps> = ({ id, isExpert, onUpdateSuccess }
   };
   return (
     <BaseForm form={form} layout="vertical" name="contentForm">
-      <BaseForm.Item name="name" label="Tên">
-        <Input onChange={(event: any) => setName(event.target.value)} placeholder="Để trống nếu không thay đổi" />
+      <BaseForm.Item name="name" label={t('mini.name')}>
+        <Input onChange={(event: any) => setName(event.target.value)} placeholder={t('mini.nochane')} />
       </BaseForm.Item>
       {isExpert && (
         <>
-          <BaseForm.Item name="jobTitle" label="Chức vụ">
-            <Input
-              onChange={(event: any) => setJobTitle(event.target.value)}
-              placeholder="Để trống nếu không thay đổi"
-            />
+          <BaseForm.Item name="jobTitle" label={t('mini.jobtitles')}>
+            <Input onChange={(event: any) => setJobTitle(event.target.value)} placeholder={t('mini.nochane')} />
           </BaseForm.Item>
-          <BaseForm.Item name="specialist" label="Chuyên môn">
-            <Input
-              onChange={(event: any) => setSpecialist(event.target.value)}
-              placeholder="Để trống nếu không thay đổi"
-            />
+          <BaseForm.Item name="specialist" label={t('mini.specialic')}>
+            <Input onChange={(event: any) => setSpecialist(event.target.value)} placeholder={t('mini.nochane')} />
           </BaseForm.Item>
-          <BaseForm.Item name="workPlace" label="Nơi làm việc">
-            <Input
-              onChange={(event: any) => setWorkPlace(event.target.value)}
-              placeholder="Để trống nếu không thay đổi"
-            />
+          <BaseForm.Item name="workPlace" label={t('mini.workplace')}>
+            <Input onChange={(event: any) => setWorkPlace(event.target.value)} placeholder={t('mini.nochane')} />
           </BaseForm.Item>
         </>
       )}
 
-      <BaseForm.Item name="password" label="Mật khẩu">
-        <Input onChange={(event: any) => setPassword(event.target.value)} placeholder="Để trống nếu không thay đổi" />
+      <BaseForm.Item name="password" label={t('mini.pass')}>
+        <Input onChange={(event: any) => setPassword(event.target.value)} placeholder={t('mini.nochane')} />
       </BaseForm.Item>
-      <BaseForm.Item name="image" label="Ảnh đại diện (Để trống nếu không thay đổi)">
+      <BaseForm.Item name="image" label={`${t('mini.avt')} (${t('mini.nochane')})`}>
         <Upload name="logo" {...props} listType="picture-card">
           <Button type="default" disabled={fileList.length > 1}>
             <UploadOutlined />
           </Button>
         </Upload>
         <Button type="default" onClick={handleUpload} loading={uploading} style={{ marginTop: 16, width: '100%' }}>
-          Cập nhập thông tin
+          {t('mini.updateinfo')}
         </Button>
       </BaseForm.Item>
     </BaseForm>

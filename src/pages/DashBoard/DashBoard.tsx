@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
       } else {
         setHasMore(true);
         if (data !== null) {
-          setNews((oldNews) => [...oldNews, ...data.data]);
+          setNews([...news, ...data.data]);
           setLoaded(false);
           setNextOffset([...news, ...data.data].length);
         }
@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
     setLoaded(true);
     dbService.get10Post(nextOffset).then((data: any) => {
       if (data !== null) {
-        setNews((oldNews) => [...oldNews, ...data.data]);
+        setNews([...news, ...data.data]);
         setLoaded(false);
         setNextOffset([...news, ...data.data].length);
       }
@@ -73,9 +73,10 @@ const Dashboard: React.FC = () => {
   }, []);
   const getnew = () => {
     setLoaded(true);
+    setOpenPostUpload(false);
     dbService.get10Post(0).then((data: any) => {
       if (data !== null) {
-        setNews((oldNews) => [...oldNews, ...data.data]);
+        setNews([...news, ...data.data]);
       }
       setLoaded(false);
     });
@@ -89,6 +90,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
+      <PageTitle>{t('mini.news')}</PageTitle>
+
       <s.TablesWrapper>
         <div
           style={{
@@ -103,19 +106,20 @@ const Dashboard: React.FC = () => {
             style={{ float: 'right', marginBottom: '10px', width: '100px' }}
             onClick={() => setOpenPostUpload(true)}
           >
-            Đăng bài
+            {t('mini.upload')}
           </Button>
         </div>
 
-        <s.Card title="Trang tin tức" style={{ zIndex: 1 }}>
+        <s.Card title={t('mini.news')} style={{ zIndex: 1 }}>
           <Row style={{ display: 'flex', justifyContent: 'center' }}>
             <Col span={10}>
               <Carousel autoplay>
-                {experts?.map((expert) => {
+                {experts?.map((expert, index) => {
                   return (
                     <s.ActivityCard
                       bodyStyle={{ padding: '25px  10px' }}
                       onClick={() => navigate(`/profile-page/${expert.id}`)}
+                      key={index}
                     >
                       <s.Wrapper>
                         <s.ImgWrapper>
@@ -156,18 +160,20 @@ const Dashboard: React.FC = () => {
                 })}
               </Carousel>
               <Collapse defaultActiveKey={['1']} onChange={onChange}>
-                <Panel header="Top bài viết nhiều bình luận nhất" key="1">
-                  {topPost?.mostComment?.map((post: any) => {
+                <Panel header={t('mini.mostcmt')} key="1">
+                  {topPost?.mostComment?.map((post: any, index: any) => {
                     return (
-                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }}>
+                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }} key={`mostComment ${index}`}>
                         <s.Wrapper>
                           <s.ImgWrapper>
-                            {post.imageList?.map((img: string) => (
+                            {post.imageList?.map((img: string, index: any) => (
                               <Image
                                 src={`http://localhost:8081/local-store/${img}`}
                                 alt={`title ${img ? img : 'dfavt'}`}
                                 width={100}
                                 height={100}
+                                preview={false}
+                                key={`mostComment Img ${index}`}
                               />
                             ))}
                           </s.ImgWrapper>
@@ -185,18 +191,20 @@ const Dashboard: React.FC = () => {
                     );
                   })}
                 </Panel>
-                <Panel header="Top bài viết nhiều lượt xem nhất" key="2">
-                  {topPost?.mostView?.map((post: any) => {
+                <Panel header={t('mini.mostview')} key="2">
+                  {topPost?.mostView?.map((post: any, index: any) => {
                     return (
-                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }}>
+                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }} key={`mostView ${index}`}>
                         <s.Wrapper>
                           <s.ImgWrapper>
-                            {post.imageList?.map((img: string) => (
+                            {post.imageList?.map((img: string, index: any) => (
                               <Image
                                 src={`http://localhost:8081/local-store/${img}`}
                                 alt={`title ${img ? img : 'dfavt'}`}
                                 width={100}
                                 height={100}
+                                preview={false}
+                                key={`mostView img ${index}`}
                               />
                             ))}
                           </s.ImgWrapper>
@@ -214,18 +222,20 @@ const Dashboard: React.FC = () => {
                     );
                   })}
                 </Panel>
-                <Panel header="Top bài viết nhiều lượt thích nhất" key="3">
-                  {topPost?.mostLike?.map((post: any) => {
+                <Panel header={t('mini.mostlike')} key="3">
+                  {topPost?.mostLike?.map((post: any, index: any) => {
                     return (
-                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }}>
+                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }} key={`mostLike  ${index}`}>
                         <s.Wrapper>
                           <s.ImgWrapper>
-                            {post.imageList?.map((img: string) => (
+                            {post.imageList?.map((img: string, index: any) => (
                               <Image
                                 src={`http://localhost:8081/local-store/${img}`}
                                 alt={`title ${img ? img : 'dfavt'}`}
                                 width={100}
                                 height={100}
+                                preview={false}
+                                key={`mostLike  img ${index}`}
                               />
                             ))}
                           </s.ImgWrapper>
@@ -281,7 +291,7 @@ const Dashboard: React.FC = () => {
         </s.Card>
       </s.TablesWrapper>
       <Modal
-        title="Upload Post"
+        title={t('mini.upload')}
         visible={openPostUpload}
         onCancel={() => setOpenPostUpload(false)}
         footer={[
