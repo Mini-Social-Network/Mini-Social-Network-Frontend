@@ -4,6 +4,7 @@ import { MobileHeader } from './layouts/MobileHeader';
 import { useResponsive } from '@app/hooks/useResponsive';
 import { useSubscription } from 'react-stomp-hooks';
 import { notificationController } from '@app/controllers/notificationController';
+import { useTranslation } from 'react-i18next';
 
 interface HeaderProps {
   toggleSider: () => void;
@@ -20,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSider, isSiderOpened, isTw
     const UserInfo = JSON.parse(UserData);
     setUserInfo(UserInfo?.topicId);
   }, []);
-
+  const { t } = useTranslation();
   useSubscription(`/topic/user/${userInfo}`, (message: any) => {
     console.log(message);
     const body = JSON.parse(message.body);
@@ -29,32 +30,29 @@ export const Header: React.FC<HeaderProps> = ({ toggleSider, isSiderOpened, isTw
     let action = '';
     switch (actionSender.action) {
       case 'post-like':
-        action = 'thích bài viết';
+        action = `${t('mini.likepost')}`;
         break;
       case 'post-comment':
-        action = 'bình luận bài viết';
+        action = `${t('mini.cmtpost')}`;
         break;
       case 'request-friend':
-        action = 'gửi lời mời kết bạn';
+        action = `${t('mini.sendfrreq')}`;
         break;
       case 'accept-friend':
-        action = 'chấp nhận lời mời kết bạn';
+        action = `${t('mini.acptfrreq')}`;
         break;
       case 'subscriber':
-        action = 'đăng ký';
-        break;
-      case 'new-message':
-        action = 'gửi tin nhắn';
+        action = `${t('mini.subex')}`;
         break;
       case 'post-new':
-        action = 'đăng bài viết mới';
+        action = `${t('mini.newpost')}`;
         break;
       default:
         break;
     }
 
     notificationController.success({
-      message: `${senderInfo.name} đã ${action} của bạn ${body.user.name}`,
+      message: `${senderInfo.name} ${t('mini.had')} ${action} của bạn ${body.user.name}`,
     });
   });
   return isTablet ? (
