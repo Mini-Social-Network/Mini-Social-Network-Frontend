@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
           }}
         >
           <Button
-             style={{ float: 'right', marginBottom: '10px', width: '130px' }}
+            style={{ float: 'right', marginBottom: '10px', width: '130px' }}
             onClick={() => setOpenPostUpload(true)}
           >
             {t('mini.upload')}
@@ -278,6 +278,7 @@ const Dashboard: React.FC = () => {
                           isDisLike={post.isDislike}
                           commentCount={post.commentCount}
                           isExpert={post.user.isExpert}
+                          viewCount={post.viewCount}
                         />
                       ))}
                     </Feed>

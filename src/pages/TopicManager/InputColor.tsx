@@ -4,7 +4,6 @@ import Button from 'antd/lib/button';
 import Dropdown from 'antd/lib/dropdown';
 import Panel from 'rc-color-picker/lib/Panel';
 import * as s from './Tables.styles';
-
 export default function InputColor(props: any) {
   const { color, onChange, de } = props;
 

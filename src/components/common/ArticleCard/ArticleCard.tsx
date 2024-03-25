@@ -8,6 +8,7 @@ import {
   CommentOutlined,
   DislikeOutlined,
   DislikeTwoTone,
+  EyeOutlined,
   LikeOutlined,
   LikeTwoTone,
   SendOutlined,
@@ -16,6 +17,7 @@ import dbService from '@app/pages/DashBoard/DashBoardService';
 import Meta from 'antd/lib/card/Meta';
 import moment from 'moment';
 import 'moment/locale/vi';
+import { useNavigate } from 'react-router-dom';
 interface ArticleCardProps {
   idPost: number;
   author?: React.ReactNode;
@@ -37,6 +39,7 @@ interface ArticleCardProps {
   isExpert: boolean;
   isLike: boolean;
   isDisLike: boolean;
+  viewCount: number;
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
@@ -56,6 +59,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   isExpert,
   isLike,
   isDisLike,
+  viewCount,
 }) => {
   const [isLiked, setIsLiked] = useState<boolean>(isLike ?? 0);
   const [isDisLiked, setIsDisLiked] = useState<boolean>(isDisLike ?? 0);
@@ -65,6 +69,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const [comment, setComment] = useState<string>('');
   const [comments, setComments] = useState<any[]>([]);
   const [reply, setReply] = useState(null);
+  const navigate = useNavigate();
   const CallLike = (id: number) => {
     dbService.callLike(id);
 
@@ -139,14 +144,29 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             <S.Description>{moment(new Date(date)).locale('vi').format('lll')}</S.Description>
           </S.InfoHeader>
         </S.Header>
-        <S.InfoWrapper>
+        <S.InfoWrapper
+          onClick={() => {
+            setOpenPost(true);
+            dbService.getComment(idPost).then((data: any) => {
+              if (data.data !== null) {
+                setComments(data.data);
+              }
+            });
+          }}
+        >
           <S.Title>{title}</S.Title>
           {!!tags && (
-            <S.TagsWrapper>
+            <S.TagsWrapper
+              onClick={() => {
+                navigate(`/find-post-page`, {
+                  state: tags.id,
+                });
+              }}
+            >
               <Tag key={tags.id} title={tags.tagName} bgColor={tags.color} />
             </S.TagsWrapper>
           )}
-          <S.Description>{description}</S.Description>
+          <S.DescriptionHide>{description}</S.DescriptionHide>
           <S.Hashtag>#{hashTags}</S.Hashtag>
         </S.InfoWrapper>
 
@@ -191,6 +211,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <CommentOutlined />
             </Button>
             {commentCount}
+          </S.Reaction>
+          <S.Reaction>
+            <S.Description>
+              <EyeOutlined />
+              {viewCount}
+            </S.Description>
           </S.Reaction>
         </S.ReactionWrapper>
       </S.Wrapper>
