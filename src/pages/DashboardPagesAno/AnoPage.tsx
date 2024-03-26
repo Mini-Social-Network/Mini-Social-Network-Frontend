@@ -48,7 +48,7 @@ const AnoPage: React.FC = () => {
 
   return (
     <>
-      <PageTitle>VBBC-Page</PageTitle>
+      <PageTitle>mini-Page</PageTitle>
       <Row
         align="middle"
         justify="space-between"
@@ -57,16 +57,16 @@ const AnoPage: React.FC = () => {
         }}
       >
         <s.SiderLogoLink to="/auth/login" style={{ margin: '1%' }}>
-          <img src={logoDark} alt="VBKidsCare" width={48} height={48} />
-          <s.BrandSpan>VB Kids Care</s.BrandSpan>
+          <img src={logoDark} alt="miniKidsCare" width={48} height={48} />
+          <s.BrandSpan>mini Kids Care</s.BrandSpan>
         </s.SiderLogoLink>
         <Button style={{ margin: '1%' }}>
           <Link to="/auth/login">Login</Link>
         </Button>
       </Row>
-      <s.Card bodyStyle={{ height: '60.3rem', padding: '20px 60px' }}>
+      <s.Card bodyStyle={{ height: '60.3rem', padding: '20px 0px' }}>
         <Row justify="end">
-          <Col span={9}>
+          <Col sm={24} md={9}>
             <Carousel autoplay>
               {experts?.map((expert, index) => {
                 return (
@@ -203,7 +203,7 @@ const AnoPage: React.FC = () => {
               </Panel>
             </Collapse>
           </Col>
-          <Col span={14} style={{ height: '60.3rem', display: 'flex', justifyContent: 'center' }}>
+          <Col sm={24} md={14} style={{ height: '60.3rem', display: 'flex', justifyContent: 'center' }}>
             <AnoScroll activity={contacts} hasMore={hasMore} next={next} />
           </Col>
         </Row>
