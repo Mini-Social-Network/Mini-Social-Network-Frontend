@@ -1,5 +1,7 @@
 import { Typography } from 'antd';
-import styled, { css } from 'styled-components';
+// import { css } from 'styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react'
 import { Card as BaseCard } from '@app/components/common/Card/Card';
 import { FONT_SIZE, media, FONT_FAMILY } from '@app/styles/themes/constants';
 

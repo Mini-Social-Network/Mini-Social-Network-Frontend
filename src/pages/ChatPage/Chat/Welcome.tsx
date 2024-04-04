@@ -1,17 +1,20 @@
+import React from 'react';
 import styled from 'styled-components';
 import HelloImage from '@app/assets/hello.gif';
+import { useTranslation } from 'react-i18next';
 interface WelcomeProps {
   currentUsername: string;
 }
 
 const Welcome: React.FC<WelcomeProps> = ({ currentUsername }) => {
+  const { t } = useTranslation();
   return (
     <Container>
       <img src={HelloImage} alt="Dog saying Hi!" />
       <h1>
-        Welcome, <span>{currentUsername}!</span>
+        {t('mini.welcome')}, <span>{currentUsername}!</span>
       </h1>
-      <h3>Please select a chat to Start messaging.</h3>
+      <h3>{t('mini.selectchat')}</h3>
     </Container>
   );
 };

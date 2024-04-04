@@ -1,26 +1,54 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import chatService from './ChatService';
 import Contacts from './Contacts';
 import Welcome from './Welcome';
 import ChatContainer from './ChatContainer';
+import { useSubscription } from 'react-stomp-hooks';
+import { notificationController } from '@app/controllers/notificationController';
 
 export interface User {
   username: string;
   email: string;
   isAvatarImageSet: boolean;
-  _id: string;
+  id: string;
   password: string;
   __v?: number;
   avatarImage: string;
+  topicId: string;
 }
 
 function Chat() {
+  const { state } = useLocation();
+
   const [contacts, setContacts] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User>();
   const [currentChat, setCurrentChat] = useState(undefined);
   const navigate = useNavigate();
+
+  const UserDataNew = localStorage.getItem('UserData');
+  const [userInfo, setUserInfo] = useState(UserDataNew ? JSON.parse(UserDataNew)?.topicId : '');
+
+  useEffect(() => {
+    const UserData = localStorage.getItem('UserData');
+    const UserInfo = JSON.parse(UserData ? UserData : '');
+    setUserInfo(UserInfo?.topicId);
+  }, []);
+
+  useSubscription(`/topic/user/${userInfo}`, (message: any) => {
+    console.log(message);
+    const body = JSON.parse(message.body);
+    const actionSender = JSON.parse(body.value);
+
+    if (actionSender.action === 'new-message') {
+      chatService.getListFriends().then((data: any) => {
+        if (data?.data?.length > 0) {
+          setContacts(data.data);
+        }
+      });
+    }
+  });
 
   useEffect(() => {
     const setUser = async () => {
@@ -40,21 +68,105 @@ function Chat() {
 
   useEffect(() => {
     chatService.getListFriends().then((data: any) => {
-      setContacts(data.data);
-    });
-  }, [currentUser, navigate]);
+      if (data?.data?.length > 0) {
+        const newdata = data.data;
+        if (state) {
+          if (newdata) {
+            const found = newdata.find((item: any) => item.topicContactId === (state as any).topicContactId);
 
-  useEffect(() => {
-    chatService.getListFriends().then((data: any) => {
-      setContacts(data.data);
+            if (!found) {
+              newdata.unshift({
+                topicContactId: (state as any).topicContactId,
+                userFriend: { name: (state as any).name, imageUrl: (state as any).imageUrl },
+              });
+            }
+          }
+
+          newdata.map((contact: any, index: any) => {
+            if (contact.topicContactId == (state as any).topicContactId) {
+              setCurrentChat(contact);
+            }
+          });
+          setContacts(newdata);
+        } else {
+          setContacts(newdata);
+        }
+      }
     });
   }, []);
 
   const handleChatChange = (chat: any) => {
     setCurrentChat(chat);
   };
+  const handleChatUpdate = (update: boolean) => {
+    if (update) {
+      chatService.getListFriends().then((data: any) => {
+        const newdata = data.data;
+        if (state) {
+          if (newdata) {
+            const found = newdata.find((item: any) => item.topicContactId === (state as any).topicContactId);
 
+            if (!found) {
+              newdata.unshift({
+                topicContactId: (state as any).topicContactId,
+                userFriend: { name: (state as any).name, imageUrl: (state as any).imageUrl },
+              });
+            }
+          }
 
+          newdata.map((contact: any, index: any) => {
+            if (contact.topicContactId == (state as any).topicContactId) {
+              setCurrentChat(contact);
+            }
+          });
+          setContacts(newdata);
+        } else {
+          setContacts(newdata);
+        }
+      });
+    }
+  };
+
+  const block = (topicId: string, uId: string) => {
+    chatService.block(topicId, uId).then((res: any) => {
+      if (res.status === 1) {
+        chatService.getListFriends().then((data: any) => {
+          const newdata = data.data;
+          if (currentChat) {
+            newdata.map((contact: any, index: any) => {
+              if ((currentChat as any)?.topicContactId === contact.topicContactId) {
+                setCurrentChat(contact);
+                notificationController.success({ message: 'Chặn thành công' });
+              }
+            });
+            setContacts(newdata);
+          } else {
+            setContacts(newdata);
+          }
+        });
+      }
+    });
+  };
+  const unblock = (topicId: string, uId: string) => {
+    chatService.unblock(topicId, uId).then((res: any) => {
+      if (res.status === 1) {
+        chatService.getListFriends().then((data: any) => {
+          const newdata = data.data;
+          if (currentChat) {
+            newdata.map((contact: any, index: any) => {
+              if ((currentChat as any)?.topicContactId === contact.topicContactId) {
+                setCurrentChat(contact);
+                notificationController.success({ message: 'Bỏ chặn thành công' });
+              }
+            });
+            setContacts(newdata);
+          } else {
+            setContacts(newdata);
+          }
+        });
+      }
+    });
+  };
   return (
     <>
       <Container>
@@ -63,7 +175,16 @@ function Chat() {
           {currentChat === undefined ? (
             <Welcome currentUsername={currentUser?.username || ''} />
           ) : (
-            <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={'a'} />
+            <ChatContainer
+              handleChatUpdate={handleChatUpdate}
+              currentChat={currentChat}
+              topicContactId={(currentChat as any).topicContactId}
+              block={block}
+              unblock={unblock}
+              changeChat={handleChatChange}
+              currentUser={currentUser ? currentUser : undefined}
+              socket={'a'}
+            />
           )}
         </div>
       </Container>

@@ -10,4 +10,4 @@ export const withLoading = <T extends object>(Component: React.ComponentType<T>)
       <Component {...props} />
     </Suspense>
   );
-};
+}; 

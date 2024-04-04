@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ConfigProvider } from 'antd';
 import viVN from 'antd/lib/locale/vi_VN';
 import enUS from 'antd/lib/locale/en_US';
-import Stomp from 'stompjs';
-import SockJS from 'sockjs-client';
+
 import { StompSessionProvider, useSubscription } from 'react-stomp-hooks';
 import GlobalStyle from './styles/GlobalStyle';
 import 'typeface-montserrat';
@@ -26,15 +25,16 @@ const App: React.FC = () => {
 
   usePWA();
 
-  useAutoNightMode();
-
-  useThemeWatcher();
   useEffect(() => {
     const UserData = localStorage.getItem('UserData');
-    const UserInfo = JSON.parse(UserData);
-    setUserInfo(UserInfo?.id.toString());
+    const UserInfo = UserData !== null ? JSON.parse(UserData) : null;
     const AccessToken = localStorage.getItem('AccessToken');
-    setAccessToken(AccessToken);
+
+    if (UserInfo && AccessToken) {
+      setUserInfo(UserInfo?.id.toString());
+      setAccessToken(AccessToken);
+    }
+
     // if (AccessToken && userInfo) {
     //   const socket = new SockJS('http://localhost:8081/system/ws');
     //   const stompClient = Stomp.over(socket);

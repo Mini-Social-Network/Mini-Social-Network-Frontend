@@ -71,8 +71,8 @@ export const SignUpForm: React.FC = () => {
           dependencies={['password']}
           rules={[
             { required: true, message: t('common.requiredField') },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
+            ({ getFieldValue }: { getFieldValue: (name: string) => string }) => ({
+              validator(_ : any, value : any) {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }

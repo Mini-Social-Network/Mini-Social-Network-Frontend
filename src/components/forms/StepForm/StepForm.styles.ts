@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 import { Select as CommonSelect } from '@app/components/common/selects/Select/Select';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { BaseForm } from '@app/components/common/forms/BaseForm/BaseForm';
@@ -37,6 +37,31 @@ export const Steps = styled(AntdSteps)`
       color: var(--subtext-color) !important;
     }
   }
+`;
+
+// Define a styled component for each Step subcomponent if needed
+export const Step = styled(AntdSteps.Step)`
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+  color: var(--primary-color);
+}
+
+.ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+  color: var(--subtext-color);
+}
+
+.ant-steps-item-wait .ant-steps-item-icon {
+  border-color: var(--subtext-color);
+  & > .ant-steps-icon {
+    color: var(--subtext-color);
+  }
+}
+
+& .ant-steps-item {
+  &-description,
+  &-subtitle {
+    color: var(--subtext-color) !important;
+  }
+}
 `;
 
 export const FormContent = styled.div`

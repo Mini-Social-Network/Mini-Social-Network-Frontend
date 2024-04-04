@@ -1,7 +1,13 @@
-import styled from 'styled-components';
-import { Typography } from 'antd';
+// import styled from 'styled-components';
+import styled from '@emotion/styled';
+import { Typography, Card as CommonCard } from 'antd';
 import { BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT, media } from '@app/styles/themes/constants';
 
+export const CardCmt = styled(CommonCard)`
+  .ant-card-meta-title {
+    font-size: 1rem;
+  }
+`;
 export const Header = styled.div`
   height: 5.5rem;
   margin-left: 1.5rem;
@@ -35,6 +41,66 @@ export const Wrapper = styled.div`
     box-shadow: var(--box-shadow-hover);
   }
 `;
+export const WrapperOnloadCmt = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 21.25rem;
+  position: relative;
+  max-width: 53.5rem;
+  box-shadow: var(--box-shadow);
+  border-radius: ${BORDER_RADIUS};
+  border: 1px black solid;
+  transition: 0.3s;
+  height: 850px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  [data-theme='dark'] & {
+    background: var(--secondary-background-color);
+  }
+
+  &:hover {
+    box-shadow: var(--box-shadow-hover);
+  }
+`;
+
+export const WrapperCmtRep = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 9 7 3.1rem;
+  position: relative;
+  max-width: 53.5rem;
+  box-shadow: var(--box-shadow);
+  border-radius: ${BORDER_RADIUS};
+  border: 1px black solid;
+  transition: 0.3s;
+
+  [data-theme='dark'] & {
+    background: var(--secondary-background-color);
+  }
+
+  &:hover {
+    box-shadow: var(--box-shadow-hover);
+  }
+`;
+export const WrapperCmt = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 21.25rem;
+  position: relative;
+  max-width: 53.5rem;
+  box-shadow: var(--box-shadow);
+  border-radius: ${BORDER_RADIUS};
+  border: 1px black solid;
+  transition: 0.3s;
+
+  [data-theme='dark'] & {
+    background: var(--secondary-background-color);
+  }
+
+  &:hover {
+    box-shadow: var(--box-shadow-hover);
+  }
+`;
 
 export const Author = styled.div`
   font-size: ${FONT_SIZE.lg};
@@ -44,15 +110,34 @@ export const Author = styled.div`
 `;
 
 export const ImageWrap = styled.div`
-  width: 45rem;
+  width: 53rem;
   display: flex;
   justify-content: center;
   overflow: hidden;
   height: 30rem;
 `;
+export const ImageWrap2 = styled.div`
+  width: 45rem;
+  display: flex;
+  justify-content: center;
+
+  height: 30rem;
+`;
 
 export const InfoWrapper = styled.div`
   padding: 1.25rem;
+
+  @media only screen and ${media.xl} {
+    padding: 1rem;
+  }
+
+  @media only screen and ${media.xxl} {
+    padding: 1.85rem;
+  }
+`;
+export const ReactionWrapper = styled.div`
+  padding: 1.25rem;
+  display: flex;
 
   @media only screen and ${media.xl} {
     padding: 1rem;
@@ -104,6 +189,22 @@ export const Title = styled.div`
   }
 `;
 
+export const Reaction = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: ${FONT_SIZE.md};
+  font-weight: ${FONT_WEIGHT.medium};
+  width: 80%;
+  line-height: 1.3rem;
+
+  color: var(--text-main-color);
+
+  @media only screen and ${media.md} {
+    font-size: ${FONT_SIZE.xl};
+  }
+`;
+
 export const DateTime = styled(Typography.Text)`
   font-size: ${FONT_SIZE.xxs};
   color: var(--text-main-color);
@@ -126,6 +227,27 @@ export const Description = styled.div`
 
   @media only screen and ${media.xxl} {
     font-size: 1rem;
+  }
+`;
+export const DescriptionHide = styled.div`
+  font-size: ${FONT_SIZE.xs};
+  color: var(--text-main-color);
+
+  overflow: hidden;
+  max-height: 300px;
+  line-height: 16px;
+  position: relative;
+  word-wrap: break-word;
+  @media only screen and ${media.xxl} {
+    font-size: 1rem;
+  }
+
+  :after {
+    content: '...';
+
+    position: absolute;
+    right: 8px;
+    bottom: 0px;
   }
 `;
 export const Hashtag = styled.div`

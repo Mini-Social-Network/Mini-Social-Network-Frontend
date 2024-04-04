@@ -1,16 +1,18 @@
-export interface Message {
+import { AnyAction } from '@reduxjs/toolkit';
+
+export interface Mention {
   id: number;
   description: string;
-}
-
-export interface Mention extends Message {
   userName: string;
   userIcon: string;
   place: string;
   href: string;
+  status: number;
+  typePost: string;
+  param: string;
 }
 
-export type Notification = Mention | Message;
+export type Notification = Mention;
 
 export const notifications = [
   {

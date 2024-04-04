@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { BaseForm } from '@app/components/common/forms/BaseForm/BaseForm';
 import { FONT_SIZE, FONT_WEIGHT } from '@app/styles/themes/constants';
