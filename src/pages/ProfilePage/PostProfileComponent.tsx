@@ -7,7 +7,6 @@ import { NewsFilter } from '@app/components/apps/newsFeed/NewsFilter/NewsFilter'
 import { ArticleCard } from '@app/components/common/ArticleCard/ArticleCard';
 import { Feed } from '@app/components/common/Feed/Feed';
 import * as s from './Tables.styles';
-<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
 
 const Post: React.FC<UserInfo> = ({ id, name, email, imageUrl, status, isExpert, rating, lastTime }: UserInfo) => {
@@ -17,16 +16,6 @@ const Post: React.FC<UserInfo> = ({ id, name, email, imageUrl, status, isExpert,
   const [loaded, setLoaded] = useState<boolean>(false);
   const [nextOffset, setNextOffset] = useState<number>(0);
 
-=======
-
-const Post: React.FC<UserInfo> = ({ id, name, email, imageUrl, status, isExpert, rating, lastTime }: UserInfo) => {
-  const [post, setPost] = useState<any[]>([]);
-
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const [nextOffset, setNextOffset] = useState<number>(0);
-
->>>>>>> main
   const getAllData = () => {
     if (id) {
       setLoaded(true);
@@ -64,11 +53,7 @@ const Post: React.FC<UserInfo> = ({ id, name, email, imageUrl, status, isExpert,
 
   return (
     <>
-<<<<<<< HEAD
       <s.Card title={t('mini.mypost')}>
-=======
-      <s.Card title="Trang của tôi">
->>>>>>> main
         <Row style={{ display: 'flex', justifyContent: 'center' }}>
           <NewsFilter news={post}>
             {({ filteredNews }) =>
@@ -77,11 +62,8 @@ const Post: React.FC<UserInfo> = ({ id, name, email, imageUrl, status, isExpert,
                   {filteredNews?.map((post) => (
                     <ArticleCard
                       key={post.id}
-<<<<<<< HEAD
                       idPost={post.id}
                       idUser={0}
-=======
->>>>>>> main
                       title={post.title}
                       description={post.context}
                       date={post.createAt}
@@ -94,12 +76,9 @@ const Post: React.FC<UserInfo> = ({ id, name, email, imageUrl, status, isExpert,
                       likeCount={post.likeCount}
                       commentCount={post.commentCount}
                       isExpert={post.user.isExpert}
-<<<<<<< HEAD
                       isLike={post.isLike}
                       isDisLike={post.isDisLike}
                       viewCount={post.viewCount}
-=======
->>>>>>> main
                     />
                   ))}
                 </Feed>

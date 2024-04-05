@@ -11,7 +11,6 @@ interface RecentActivityFeedProps {
   hasMore: boolean;
   next: () => void;
   unfriend: any;
-<<<<<<< HEAD
   acpfriend: any;
   cancelacpfriend: any;
 }
@@ -36,15 +35,6 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
           acpfriend={acpfriend}
           cancelacpfriend={cancelacpfriend}
         />
-=======
-}
-
-const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ unfriend, activity, hasMore, next }) => {
-  const activityItems = useMemo(
-    () =>
-      activity.map((item, index) => (
-        <RecentActivityItem key={index} {...item.userFriend} topicContactId={item.topicContactId} unfriend={unfriend} />
->>>>>>> main
       )),
     [activity],
   );

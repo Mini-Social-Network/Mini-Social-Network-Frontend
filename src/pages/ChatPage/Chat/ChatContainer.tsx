@@ -24,12 +24,9 @@ interface ChatContainerProps {
   socket: any;
   topicContactId: any;
   handleChatUpdate: any;
-<<<<<<< HEAD
   block: any;
   unblock: any;
   changeChat: any;
-=======
->>>>>>> main
 }
 export interface Message {
   fromSelf: boolean;
@@ -51,7 +48,6 @@ export interface User {
   topicId: string;
 }
 
-<<<<<<< HEAD
 const ChatContainer: React.FC<ChatContainerProps> = ({
   handleChatUpdate,
   currentChat,
@@ -61,9 +57,6 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   unblock,
   changeChat,
 }) => {
-=======
-const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, currentChat, currentUser, socket }) => {
->>>>>>> main
   const [messages, setMessages] = useState<Message[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<Message>();
   const [isLoading, setIsLoading] = useState(true);
@@ -106,7 +99,6 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
 
   useSubscription(`/topic/chat/${currentChat.topicContactId}`, (message: any) => {
     const body = JSON.parse(message.body);
-<<<<<<< HEAD
     console.log(body, parseInt(body?.data ? body?.data : 0), currentUser?.id);
     if (body.status === 1) {
       if (body?.data?.isFile) {
@@ -137,22 +129,6 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
         changeChat(data);
         notificationController.success({ message: 'Bạn đã bị chặn' });
       }
-=======
-    console.log(body);
-    if (body.data.isFile) {
-      setArrivalMessage({
-        fromSelf: body.data.user.id === currentUser?.id ? true : false,
-        content: '',
-        image: `http://localhost:8081/local-store/${body.data.content}`,
-        user: body.data.user.id,
-      });
-    } else {
-      setArrivalMessage({
-        fromSelf: body.data.user.id === currentUser?.id ? true : false,
-        content: body.data.content,
-        user: body.data.user.id,
-      });
->>>>>>> main
     }
   });
   useEffect(() => {

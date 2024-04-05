@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import { AnyAction } from '@reduxjs/toolkit';
 
-=======
->>>>>>> main
 export interface Mention {
   id: number;
   description: string;
@@ -11,11 +8,8 @@ export interface Mention {
   place: string;
   href: string;
   status: number;
-<<<<<<< HEAD
   typePost: string;
   param: string;
-=======
->>>>>>> main
 }
 
 export type Notification = Mention;

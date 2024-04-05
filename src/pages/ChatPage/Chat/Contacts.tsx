@@ -5,10 +5,7 @@ import Chat from '@app/assets/chat.png';
 import defaultAvatar from '@app/assets/DefaultAvatar.png';
 
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
-=======
->>>>>>> main
 
 interface ContactsProps {
   contacts: any;
@@ -28,11 +25,6 @@ const Contacts: React.FC<ContactsProps> = ({ contacts, currentUser, changeChat }
   const [currentUserName, setCurrentUserName] = useState<string>('');
   const [currentUserImage, setCurrentUserImage] = useState<string>('');
   const [currentSelected, setCurrentSelected] = useState<string>('');
-<<<<<<< HEAD
-=======
-
-  const navigate = useNavigate();
->>>>>>> main
 
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -57,11 +49,7 @@ const Contacts: React.FC<ContactsProps> = ({ contacts, currentUser, changeChat }
       <Container style={{ backgroundColor: 'var(--background-color)' }}>
         <div className="brand" style={{ backgroundColor: 'var(--timeline-background-color)' }}>
           <img src={Chat} alt="logo" />
-<<<<<<< HEAD
           <h3 style={{ color: 'var(--text-main-color)' }}>{t('mini.chat')}</h3>
-=======
-          <h3 style={{ color: 'var(--text-main-color)' }}>Chat</h3>
->>>>>>> main
         </div>
         <div className="contacts">
           {contacts?.map((contact: any, index: any) => {

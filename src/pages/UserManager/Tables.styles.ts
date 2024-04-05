@@ -1,10 +1,7 @@
 import styled from 'styled-components';
 import { Card as CommonCard } from 'components/common/Card/Card';
-<<<<<<< HEAD
 import { Typography } from 'antd';
 import { FONT_SIZE, media } from '@app/styles/themes/constants';
-=======
->>>>>>> main
 
 export const TablesWrapper = styled.div`
   margin-top: 1.875rem;
@@ -13,7 +10,6 @@ export const TablesWrapper = styled.div`
 export const Card = styled(CommonCard)`
   margin-bottom: 2rem;
 `;
-<<<<<<< HEAD
 
 export const WrapperUser = styled.div`
   align-items: center;
@@ -61,5 +57,3 @@ export const Title = styled(Typography.Title)`
     }
   }
 `;
-=======
->>>>>>> main

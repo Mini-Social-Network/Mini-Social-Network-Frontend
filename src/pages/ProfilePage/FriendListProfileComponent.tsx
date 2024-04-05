@@ -6,7 +6,6 @@ import * as s from './Tables.styles';
 import RecentActivityFeed from './RecentActivityFeed';
 import profilePageService from './ProfilePageServicce';
 import { notificationController } from '@app/controllers/notificationController';
-<<<<<<< HEAD
 import { Text } from '@app/components/layouts/AuthLayout/AuthLayout.styles';
 import { Title } from '../DashBoard/Tables.styles';
 import { useTranslation } from 'react-i18next';
@@ -18,15 +17,6 @@ const FriendList: React.FC = () => {
   const [filteredActivity, setFilteredActivity] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const { t } = useTranslation();
-=======
-
-const FriendList: React.FC = () => {
-  const [friendList, setFriendList] = useState([]);
-  const [activity, setActivity] = useState<any[]>([]);
-  const [filteredActivity, setFilteredActivity] = useState<any[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-
->>>>>>> main
   const [filters, setFilters] = useState<any>({
     status: [],
   });
@@ -60,11 +50,7 @@ const FriendList: React.FC = () => {
     });
   }, []);
   const unfriendById = (id: number) => {
-<<<<<<< HEAD
     ProfilePageService.updateFriend(id, 'unfriend').then((res) => {
-=======
-    ProfilePageService.unFriend(id, 'unfriend').then((res) => {
->>>>>>> main
       if (res.data) {
         setTimeout(() => {
           notificationController.success({ message: 'Unfriend success' });
@@ -77,7 +63,6 @@ const FriendList: React.FC = () => {
       }
     });
   };
-<<<<<<< HEAD
   const acpfriendById = (id: number) => {
     ProfilePageService.updateFriend(id, 'friend').then((res) => {
       if (res.data) {
@@ -131,12 +116,6 @@ const FriendList: React.FC = () => {
             cancelacpfriend={cancelAcpfriendById}
           />
         </Col>
-=======
-  return (
-    <s.Card title="List Friend">
-      <Row style={{ width: '100%' }}>
-        <RecentActivityFeed unfriend={unfriendById} activity={activity} hasMore={hasMore} next={next} />
->>>>>>> main
       </Row>
     </s.Card>
   );

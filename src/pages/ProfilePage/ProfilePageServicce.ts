@@ -19,7 +19,6 @@ class ProfilePageService extends BaseService<any> {
   public findUserById(id: number) {
     return this.fetch.post(`${this.userBaseUri}findById?id=${id}`);
   }
-<<<<<<< HEAD
   public updateFriend(id: number, action: string) {
     return this.fetch.post(`/contact/external/update?user_id=${id}&action=${action}`);
   }
@@ -29,11 +28,6 @@ class ProfilePageService extends BaseService<any> {
   public report(Id: number,reason:string) {
     return this.fetch.post(`/user/external/report/${Id}?reason=${reason}`);
   }
-=======
-  public unFriend(id: number, action: string) {
-    return this.fetch.post(`/contact/external/update?user_id=${id}&action=${action}`);
-  }
->>>>>>> main
 }
 
 const profilePageService = new ProfilePageService();

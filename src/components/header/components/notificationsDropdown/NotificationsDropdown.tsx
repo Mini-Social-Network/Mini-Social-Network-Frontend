@@ -8,7 +8,6 @@ import { notifications as fetchedNotifications, Notification } from '@app/api/no
 import { HeaderActionWrapper } from '@app/components/header/Header.styles';
 import notificationsService from './NotificationsService';
 import DefaultAvatar from '@app/assets/DefaultAvatar.png';
-<<<<<<< HEAD
 import { useSubscription } from 'react-stomp-hooks';
 import { useTranslation } from 'react-i18next';
 export const NotificationsDropdown: React.FC = () => {
@@ -70,18 +69,12 @@ export const NotificationsDropdown: React.FC = () => {
     }
   });
 
-=======
-export const NotificationsDropdown: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isOpened, setOpened] = useState(false);
->>>>>>> main
   useEffect(() => {
     notificationsService.getNotifiCations().then((data: any) => {
       if (data.data) {
         const noti = data.data?.map((noti: any) => {
           const value = JSON.parse(noti.value);
           const userInfo = JSON.parse(value.user);
-<<<<<<< HEAD
           let action = '';
           switch (value.action) {
             case 'post-like':
@@ -108,20 +101,12 @@ export const NotificationsDropdown: React.FC = () => {
           return {
             id: noti.id,
             description: action,
-=======
-          return {
-            id: noti.id,
-            description: value.action,
->>>>>>> main
             userName: userInfo.name,
             name: 'mention',
             userIcon: userInfo.imageUrl ? `http://localhost:8081/local-store/${userInfo.imageUrl}` : DefaultAvatar,
             status: noti.status,
-<<<<<<< HEAD
             param: noti.param,
             typePost: noti.type,
-=======
->>>>>>> main
           };
         });
         setNotifications(noti);

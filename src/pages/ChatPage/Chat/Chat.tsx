@@ -68,7 +68,6 @@ function Chat() {
 
   useEffect(() => {
     chatService.getListFriends().then((data: any) => {
-<<<<<<< HEAD
       if (data?.data?.length > 0) {
         const newdata = data.data;
         if (state) {
@@ -92,29 +91,6 @@ function Chat() {
         } else {
           setContacts(newdata);
         }
-=======
-      const newdata = data.data;
-      if (state) {
-        if (newdata) {
-          const found = newdata.find((item: any) => item.topicContactId === state.topicContactId);
-
-          if (!found) {
-            newdata.unshift({
-              topicContactId: state.topicContactId,
-              userFriend: { name: state.name, imageUrl: state.imageUrl },
-            });
-          }
-        }
-
-        newdata.map((contact: any, index: any) => {
-          if (contact.topicContactId == state.topicContactId) {
-            setCurrentChat(contact);
-          }
-        });
-        setContacts(newdata);
-      } else {
-        setContacts(newdata);
->>>>>>> main
       }
     });
   }, []);
@@ -128,31 +104,18 @@ function Chat() {
         const newdata = data.data;
         if (state) {
           if (newdata) {
-<<<<<<< HEAD
             const found = newdata.find((item: any) => item.topicContactId === (state as any).topicContactId);
 
             if (!found) {
               newdata.unshift({
                 topicContactId: (state as any).topicContactId,
                 userFriend: { name: (state as any).name, imageUrl: (state as any).imageUrl },
-=======
-            const found = newdata.find((item: any) => item.topicContactId === state.topicContactId);
-
-            if (!found) {
-              newdata.unshift({
-                topicContactId: state.topicContactId,
-                userFriend: { name: state.name, imageUrl: state.imageUrl },
->>>>>>> main
               });
             }
           }
 
           newdata.map((contact: any, index: any) => {
-<<<<<<< HEAD
             if (contact.topicContactId == (state as any).topicContactId) {
-=======
-            if (contact.topicContactId == state.topicContactId) {
->>>>>>> main
               setCurrentChat(contact);
             }
           });
@@ -163,7 +126,6 @@ function Chat() {
       });
     }
   };
-<<<<<<< HEAD
 
   const block = (topicId: string, uId: string) => {
     chatService.block(topicId, uId).then((res: any) => {
@@ -205,8 +167,6 @@ function Chat() {
       }
     });
   };
-=======
->>>>>>> main
   return (
     <>
       <Container>
@@ -218,15 +178,11 @@ function Chat() {
             <ChatContainer
               handleChatUpdate={handleChatUpdate}
               currentChat={currentChat}
-<<<<<<< HEAD
               topicContactId={(currentChat as any).topicContactId}
               block={block}
               unblock={unblock}
               changeChat={handleChatChange}
               currentUser={currentUser ? currentUser : undefined}
-=======
-              currentUser={currentUser}
->>>>>>> main
               socket={'a'}
             />
           )}

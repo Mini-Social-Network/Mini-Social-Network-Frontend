@@ -6,10 +6,7 @@ import * as S from './RecentActivityItem.styles';
 import { Activity } from '@app/api/activity.api';
 import dfavt from '@app/share/dfavt.png';
 import { Button } from 'antd';
-<<<<<<< HEAD
 import { WrapperBtn } from '@app/pages/HistoryPage/Tables.styles';
-=======
->>>>>>> main
 
 export const RecentActivityItem: React.FC<Activity> = ({
   id,
@@ -17,7 +14,6 @@ export const RecentActivityItem: React.FC<Activity> = ({
   name,
   status,
   email,
-<<<<<<< HEAD
   statusFr,
   acpfriend,
   cancelacpfriend,
@@ -25,22 +21,11 @@ export const RecentActivityItem: React.FC<Activity> = ({
 }) => {
   const { t } = useTranslation();
   console.log(imageUrl, name, status, email);
-=======
-  topicContactId,
-  unfriend,
-}) => {
-  const { t } = useTranslation();
-  console.log(imageUrl, name, status, email, topicContactId);
->>>>>>> main
 
   const currentActivity = useMemo(() => activityStatuses.find((dbStatus) => dbStatus.name === status), [status]);
 
   return (
-<<<<<<< HEAD
     <S.ActivityCard $isSider={false}>
-=======
-    <S.ActivityCard>
->>>>>>> main
       <S.Wrapper>
         <S.ImgWrapper>
           <img
@@ -55,7 +40,6 @@ export const RecentActivityItem: React.FC<Activity> = ({
           <S.InfoHeaderWrapper>
             <S.TitleWrapper>
               <S.Title level={5}>{name}</S.Title>
-<<<<<<< HEAD
             </S.TitleWrapper>
             <S.Text>{email}</S.Text>
           </S.InfoHeaderWrapper>
@@ -90,23 +74,6 @@ export const RecentActivityItem: React.FC<Activity> = ({
               </Button>
             </WrapperBtn>
           )}
-=======
-
-              <S.IconWrapper>{currentActivity?.icon}</S.IconWrapper>
-            </S.TitleWrapper>
-
-            <S.Text>
-              {t(currentActivity?.title || '')} {t('nft.by')} {email}
-            </S.Text>
-          </S.InfoHeaderWrapper>
-          <Button
-            onClick={() => {
-              unfriend(id);
-            }}
-          >
-            Huỷ Kết Bạn
-          </Button>
->>>>>>> main
         </S.InfoWrapper>
       </S.Wrapper>
     </S.ActivityCard>

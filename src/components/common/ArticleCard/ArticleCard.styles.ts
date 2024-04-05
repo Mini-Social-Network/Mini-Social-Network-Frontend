@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 // import styled from 'styled-components';
 import styled from '@emotion/styled';
-=======
-import styled from 'styled-components';
->>>>>>> main
 import { Typography, Card as CommonCard } from 'antd';
 import { BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT, media } from '@app/styles/themes/constants';
 
@@ -55,13 +51,9 @@ export const WrapperOnloadCmt = styled.div`
   border-radius: ${BORDER_RADIUS};
   border: 1px black solid;
   transition: 0.3s;
-<<<<<<< HEAD
   height: 850px;
   overflow-y: auto;
   overflow-x: hidden;
-=======
-
->>>>>>> main
   [data-theme='dark'] & {
     background: var(--secondary-background-color);
   }

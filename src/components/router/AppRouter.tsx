@@ -66,13 +66,9 @@ export const AppRouter: React.FC = () => {
           <Route path="profile-page" element={<Profile />} />
           <Route path="profile-page/:id" element={<Profile />} />
           <Route path="chat-center" element={<ChatPage />} />
-<<<<<<< HEAD
           <Route path="detail" element={<PostDetail />} />
 
           <Route path="find-post-page" element={<FindPost />} />
-=======
-
->>>>>>> main
           <Route path="dashboard" element={<Dashboard />} />
 
           <Route path="/user-page" element={<UserManager />} />

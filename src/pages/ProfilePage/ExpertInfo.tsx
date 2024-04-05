@@ -4,7 +4,6 @@ import { Card } from './Tables.styles';
 import { Title } from '../DashBoard/Tables.styles';
 import { Rate } from 'antd';
 
-<<<<<<< HEAD
 const ExpertInfoPage: React.FC<ExpertInfo> = ({ jobTitle, specialist, workPlace, rating, ratingCount }) => {
   const [expertInfo, setExpertInfo] = useState({ jobTitle, specialist, workPlace, rating, ratingCount });
   useEffect(() => {
@@ -28,22 +27,6 @@ const ExpertInfoPage: React.FC<ExpertInfo> = ({ jobTitle, specialist, workPlace,
         </span>
       ) : null}
     </Card>
-=======
-const ExpertInfoPage: React.FC<ExpertInfo> = ({ jobTitle, specialist, workPlace, rating }) => {
-  const [expertInfo, setExpertInfo] = useState({ jobTitle, specialist, workPlace, rating });
-
-  return (
-    <>
-      <div>
-        <ul>
-          {expertInfo.jobTitle && <li>{expertInfo.jobTitle}</li>}
-          {expertInfo.specialist && <li>{expertInfo.specialist}</li>}
-          {expertInfo.workPlace && <li>{expertInfo.workPlace}</li>}
-          {expertInfo.rating && <li>{expertInfo.rating}</li>}
-        </ul>
-      </div>
-    </>
->>>>>>> main
   );
 };
 

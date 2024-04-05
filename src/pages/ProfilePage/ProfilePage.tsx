@@ -6,10 +6,6 @@ import ProfilePageService from './ProfilePageServicce';
 import Post from './PostProfileComponent';
 import FriendList from './FriendListProfileComponent';
 import dfavt from '@app/assets/DefaultAvatar.png';
-<<<<<<< HEAD
-=======
-const { Meta } = Card;
->>>>>>> main
 import { useParams } from 'react-router-dom';
 import ExpertInfoPage from './ExpertInfo';
 import profilePageService from './ProfilePageServicce';
@@ -43,18 +39,11 @@ export class UserInfo {
 }
 
 export class ExpertInfo {
-<<<<<<< HEAD
   jobTitle?: string;
   specialist?: string;
   workPlace?: string;
   rating?: number;
   ratingCount?: number;
-=======
-  jobTitle?: String;
-  specialist?: String;
-  workPlace?: String;
-  rating?: String;
->>>>>>> main
 }
 
 const Profile: React.FC = () => {
@@ -94,7 +83,6 @@ const Profile: React.FC = () => {
   const onChange = (key: string) => {
     setDefaultActiveKey(key);
   };
-<<<<<<< HEAD
   const onUpdateSuccess = (key: boolean) => {
     const currentUserId = currentUserInfo.id;
     if (key) {
@@ -127,8 +115,6 @@ const Profile: React.FC = () => {
     }
     setIsOpenRP(false);
   };
-=======
->>>>>>> main
   return (
     <>
       <div style={{ width: '100%' }}>
@@ -235,11 +221,7 @@ const Profile: React.FC = () => {
           </Row>
         </Card>
         <Tabs activeKey={defaultActiveKey} onChange={onChange}>
-<<<<<<< HEAD
           <Tabs.TabPane tab={t('mini.mypost')} key="1">
-=======
-          <Tabs.TabPane tab="Bài Đăng" key="1">
->>>>>>> main
             <Post {...userInfo} />
           </Tabs.TabPane>
           {isCurrent && (

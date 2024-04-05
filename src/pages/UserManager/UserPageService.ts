@@ -16,7 +16,6 @@ class UserService extends BaseService<any> {
   public GetUsers(data: any) {
     return this.fetch.post(`/user/external/findAll?offset=0`, data);
   }
-<<<<<<< HEAD
 
   public AddUser(data: any) {
     return this.fetch.post(`/user/external/create`, data);
@@ -31,8 +30,6 @@ class UserService extends BaseService<any> {
   public GetReport(data: any) {
     return this.fetch.post(`/user/external/findAllReport?offset=0`, data);
   }
-=======
->>>>>>> main
 }
 
 const userService = new UserService();

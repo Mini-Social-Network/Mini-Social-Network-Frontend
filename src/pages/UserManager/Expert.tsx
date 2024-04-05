@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { Col, Row, Modal, Form, Image } from 'antd';
 import { Table } from 'components/common/Table/Table';
 import { useTranslation } from 'react-i18next';
@@ -17,36 +16,11 @@ import { notificationController } from '@app/controllers/notificationController'
 
 import { UpdateExpert } from './UpdateExpert';
 import { AddExpert } from './AddExpert';
-=======
-import { Col, Row, DatePicker, Space, Modal, Form, InputNumber, Select, notification, Input, Radio } from 'antd';
-import { Table } from 'components/common/Table/Table';
-import { useTranslation } from 'react-i18next';
-import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
-import * as S from '@app/pages/uiComponentsPages//UIComponentsPage.styles';
-import UserService from './UserPageService';
-import { Button } from '@app/components/common/buttons/Button/Button';
-import * as s from './Tables.styles';
-
-import moment from 'moment';
-import { ColumnsType } from 'antd/es/table';
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  ExclamationOutlined,
-  FireOutlined,
-  LoadingOutlined,
-} from '@ant-design/icons';
-import { notificationController } from '@app/controllers/notificationController';
-import { AnyIfEmpty } from 'react-redux';
-import { getData } from 'country-list';
-import { number } from 'echarts';
->>>>>>> main
 
 const Expert: React.FC = () => {
   const { t } = useTranslation();
   const [usersData, setusersData] = useState<any>([]);
 
-<<<<<<< HEAD
   const [userSelected, setuserSelected] = useState<any>(null);
 
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
@@ -55,19 +29,6 @@ const Expert: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-=======
-  const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
-  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
-  const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
-  const [isOpenCancel, setIsOpenCancel] = useState<boolean>(false);
-  const [isOpenConfirmCancel, setIsOpenConfirmCancel] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [status, setStatus] = useState<string>('running');
-  const [searchValue, setSearchValue] = useState<any>();
-  const [form] = Form.useForm();
-  const [formAdd] = Form.useForm();
->>>>>>> main
   const [admin, setAdmin] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
 
@@ -111,7 +72,6 @@ const Expert: React.FC = () => {
       showSorterTooltip: false,
     },
     {
-<<<<<<< HEAD
       title: 'Thông tin',
       key: 'info',
       render: (record) => (
@@ -133,16 +93,10 @@ const Expert: React.FC = () => {
           </s.WrapperUser>
         </s.WrapperExpert>
       ),
-=======
-      title: 'name',
-      dataIndex: 'name',
-      key: 'name',
->>>>>>> main
       sorter: (a, b) => a.name.localeCompare(b.name),
       showSorterTooltip: false,
     },
     {
-<<<<<<< HEAD
       title: 'Chi tiết chuyên gia',
       key: 'detail',
       render: (record) => (
@@ -154,8 +108,6 @@ const Expert: React.FC = () => {
       ),
     },
     {
-=======
->>>>>>> main
       title: 'email',
       dataIndex: 'email',
       key: 'email',
@@ -163,21 +115,11 @@ const Expert: React.FC = () => {
       showSorterTooltip: false,
     },
     {
-<<<<<<< HEAD
       title: 'Quyền',
-=======
-      title: 'emailVerified',
-      dataIndex: 'emailVerified',
-      key: 'emailVerified',
-    },
-    {
-      title: 'role',
->>>>>>> main
       dataIndex: 'role',
       key: 'role',
     },
     {
-<<<<<<< HEAD
       title: 'Ngày tạo',
       key: 'createAt',
       render: (record) => <span>{moment(new Date(record.createAt)).locale('vi').format('hh:mm, DD MMMM YYYY')}</span>,
@@ -186,27 +128,6 @@ const Expert: React.FC = () => {
       title: 'Ngày cập nhật',
       key: 'updateAt',
       render: (record) => <span>{moment(new Date(record.updateAt)).locale('vi').format('hh:mm, DD MMMM YYYY')}</span>,
-=======
-      title: 'status',
-      dataIndex: 'status',
-      key: 'status',
-    },
-
-    {
-      title: 'phoneNumber',
-      dataIndex: 'phoneNumber',
-      key: 'phoneNumber',
-    },
-    {
-      title: 'createAt',
-      dataIndex: 'createAt',
-      key: 'createAt',
-    },
-    {
-      title: 'updateAt',
-      dataIndex: 'updateAt',
-      key: 'updateAt',
->>>>>>> main
     },
   ];
   useEffect(() => {
@@ -222,7 +143,6 @@ const Expert: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-<<<<<<< HEAD
     setIsPending(false);
     UserService.GetUsers(initData).then((data: any) => {
       const resData: any = [];
@@ -234,20 +154,10 @@ const Expert: React.FC = () => {
           });
         });
         setusersData(resData);
-=======
-    const resData: any = [];
-
-    setIsPending(false);
-
-    UserService.GetUsers(initData).then((data: any) => {
-      if (data.status === 1) {
-        setusersData(data.data);
->>>>>>> main
         setIsLoading(false);
       }
     });
   }, []);
-<<<<<<< HEAD
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -334,14 +244,11 @@ const Expert: React.FC = () => {
       });
     }
   };
-=======
->>>>>>> main
   return (
     <>
       <PageTitle>Trang quản lý User</PageTitle>
       <s.TablesWrapper>
         <s.Card
-<<<<<<< HEAD
           title={'Quản lý Chuyên gia'}
           extra={
             <div style={{ display: 'flex' }}>
@@ -367,52 +274,10 @@ const Expert: React.FC = () => {
                 <div />
               )}
             </div>
-=======
-          title={t('common.order_list')}
-          extra={
-            !isPending ? (
-              <div style={{ display: 'flex' }}>
-                {admin ? (
-                  <Button severity="success" onClick={() => setIsOpenAdd(true)}>
-                    {t('common.add')}
-                  </Button>
-                ) : (
-                  <div />
-                )}
-                {admin ? (
-                  <Button severity="info" style={{ marginLeft: '15px' }} onClick={() => setIsOpenEdit(true)}>
-                    {t('common.edit')}
-                  </Button>
-                ) : (
-                  <div />
-                )}
-                {admin ? (
-                  <Button severity="error" style={{ marginLeft: '15px' }} onClick={() => setIsOpenDelete(true)}>
-                    {t('common.delete')}
-                  </Button>
-                ) : (
-                  <div />
-                )}
-                {status === 'running' && (
-                  <Button severity="error" style={{ marginLeft: '15px' }} onClick={() => setIsOpenCancel(true)}>
-                    {t('common.cancel')}
-                  </Button>
-                )}
-                {status === 'cancel' && (
-                  <Button severity="error" style={{ marginLeft: '15px' }} onClick={() => setIsOpenConfirmCancel(true)}>
-                    {t('common.cofirmCancel')}
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div style={{ display: 'flex' }}></div>
-            )
->>>>>>> main
           }
         >
           <Row style={{ width: '100%', marginTop: '10px' }}>
             <Col md={24}>
-<<<<<<< HEAD
               <Table
                 dataSource={usersData}
                 columns={UserColumns}
@@ -423,14 +288,10 @@ const Expert: React.FC = () => {
                   ...rowSelection,
                 }}
               />
-=======
-              <Table dataSource={usersData} columns={UserColumns} scroll={{ x: 2000 }} loading={isLoading} />
->>>>>>> main
             </Col>
           </Row>
         </s.Card>
       </s.TablesWrapper>
-<<<<<<< HEAD
       <Modal
         title={t('common.delete') + ' Chuyên gia'}
         visible={isOpenDelete}
@@ -484,8 +345,6 @@ const Expert: React.FC = () => {
       >
         <AddExpert onAddSuccess={onAddSuccess} />
       </Modal>
-=======
->>>>>>> main
     </>
   );
 };
