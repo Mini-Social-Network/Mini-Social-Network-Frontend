@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+//import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { Input as AntInput, Button, Checkbox } from 'antd';
 import { SearchOutlined, PlusCircleFilled, CloseOutlined } from '@ant-design/icons';
 import { DayjsDatePicker } from '@app/components/common/pickers/DayjsDatePicker';
@@ -87,7 +88,7 @@ export const InputWrapper = styled.div`
 export const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 1.875rem;
+  margin-bottom: 1.875rem;
 `;
 
 export const TitleHeader = styled.div`

@@ -10,7 +10,7 @@ import { notificationController } from '@app/controllers/notificationController'
 import { Dates } from '@app/constants/Dates';
 import { mergeBy } from '@app/utils/utils';
 import * as S from './StepForm.styles';
-import { Steps } from './StepForm.styles';
+import { Steps, Step } from './StepForm.styles';
 interface FormValues {
   [key: string]: string | undefined;
 }
@@ -127,7 +127,7 @@ export const StepForm: React.FC = () => {
     >
       <Steps labelPlacement="vertical" size="small" current={current}>
         {steps.map((item) => (
-          <Steps.Step key={item.title} title={item.title} description="" />
+          <Step key={item.title} title={item.title} description="" />
         ))}
       </Steps>
       <div>{formFieldsUi[current]}</div>

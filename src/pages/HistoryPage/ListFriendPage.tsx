@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, DatePicker, Space, Input } from 'antd';
 
+<<<<<<< HEAD
+=======
 const { Search } = Input;
 
+>>>>>>> main
 import { Table } from 'components/common/Table/Table';
 import { Line } from '@ant-design/plots';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +19,11 @@ import ListFriendScroll from './ListFriendScroll';
 import listContactService from './ListFriendPageService';
 import AudioOutlined from '@ant-design/icons/lib/icons/AudioOutlined';
 import { useSubscription } from 'react-stomp-hooks';
+<<<<<<< HEAD
+
+const { Search } = Input;
+=======
+>>>>>>> main
 
 const ListFriendPage: React.FC = () => {
   const [contacts, setContacts] = useState<any[]>([]);
@@ -28,6 +36,10 @@ const ListFriendPage: React.FC = () => {
   const [keyword, setKeyWord] = useState<string>('');
   const UserDataNew = localStorage.getItem('UserData');
   const [userInfo, setUserInfo] = useState(UserDataNew ? JSON.parse(UserDataNew)?.topicId : '');
+<<<<<<< HEAD
+  const { t } = useTranslation();
+=======
+>>>>>>> main
   useEffect(() => {
     if (filters.status.length > 0) {
       setFilteredActivity(contacts.filter((item) => filters.status.some((filter: any) => filter === item.status)));
@@ -129,7 +141,11 @@ const ListFriendPage: React.FC = () => {
 
   useEffect(() => {
     const UserData = localStorage.getItem('UserData');
+<<<<<<< HEAD
+    const UserInfo = JSON.parse(UserData as string);
+=======
     const UserInfo = JSON.parse(UserData);
+>>>>>>> main
     setUserInfo(UserInfo?.topicId);
   }, [localStorage.getItem('UserData')]);
 
@@ -159,10 +175,17 @@ const ListFriendPage: React.FC = () => {
   });
   return (
     <>
+<<<<<<< HEAD
+      <PageTitle>{t('mini.comunication')}</PageTitle>
+
+      <s.Card title={t('mini.comunication')} bodyStyle={{ height: '48rem', padding: '20px 60px' }}>
+        <Search style={{ width: '30%' }} placeholder={t('mini.findUser')} enterButton onSearch={onSearch} />
+=======
       <PageTitle>Cộng đồng</PageTitle>
 
       <s.Card title="Cộng đồng" bodyStyle={{ height: '48rem', padding: '20px 60px' }}>
         <Search style={{ width: '30%' }} placeholder="Tìm kiếm người dùng" enterButton onSearch={onSearch} />
+>>>>>>> main
         <ListFriendScroll
           activity={contacts}
           hasMore={hasMore}

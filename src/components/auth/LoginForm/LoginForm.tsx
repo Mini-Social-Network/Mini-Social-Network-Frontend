@@ -14,8 +14,8 @@ interface LoginFormData {
 }
 
 export const initValues: LoginFormData = {
-  email: 'admin',
-  password: 'admin',
+  email: '',
+  password: '',
 };
 
 export const LoginForm: React.FC = () => {
@@ -34,7 +34,7 @@ export const LoginForm: React.FC = () => {
           localStorage.setItem('AccessToken', res.data.accessToken);
           await AuthService.verifyToken().then((resp: any) => {
             localStorage.setItem('UserData', JSON.stringify(resp.data));
-            
+
             navigate('/');
             notificationController.success({
               message: 'Login Success',
@@ -77,9 +77,9 @@ export const LoginForm: React.FC = () => {
               <S.RememberMeText>{t('login.rememberMe')}</S.RememberMeText>
             </Auth.FormCheckbox>
           </BaseForm.Item>
-          <Link to="/auth/forgot-password">
+          {/* <Link to="/auth/forgot-password">
             <S.ForgotPasswordText>{t('common.forgotPass')}</S.ForgotPasswordText>
-          </Link>
+          </Link> */}
         </Auth.ActionsWrapper>
         <BaseForm.Item noStyle>
           <Auth.SubmitButton type="primary" htmlType="submit" loading={isLoading}>

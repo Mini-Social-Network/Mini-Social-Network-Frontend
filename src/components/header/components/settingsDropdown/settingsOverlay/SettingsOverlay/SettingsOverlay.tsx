@@ -19,16 +19,16 @@ export const SettingsOverlay: React.FC = ({ ...props }) => {
         <DropdownCollapse.Panel header={t('header.changeLanguage')} key="languagePicker">
           <LanguagePicker />
         </DropdownCollapse.Panel>
-        <DropdownCollapse.Panel header={t('header.changeTheme')} key="themePicker">
+        {/* <DropdownCollapse.Panel header={t('header.changeTheme')} key="themePicker">
           <ThemePicker />
-        </DropdownCollapse.Panel>
+        </DropdownCollapse.Panel> */}
         {/* <DropdownCollapse.Panel header={t('header.nightMode.title')} key="nightMode">
           <NightModeSettings />
         </DropdownCollapse.Panel> */}
       </DropdownCollapse>
       {isPWASupported && (
         <S.PwaInstallWrapper>
-          <Button block type="primary" onClick={() => event && (event as BeforeInstallPromptEvent).prompt()}>
+          <Button block type="primary" onClick={() => event && (event as any).prompt()}>
             {t('common.pwa')}
           </Button>
         </S.PwaInstallWrapper>

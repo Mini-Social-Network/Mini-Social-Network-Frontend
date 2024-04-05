@@ -1,4 +1,9 @@
+<<<<<<< HEAD
+// import styled from 'styled-components';
+import styled from '@emotion/styled';
+=======
 import styled from 'styled-components';
+>>>>>>> main
 import { Typography, Card as CommonCard } from 'antd';
 import { BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT, media } from '@app/styles/themes/constants';
 
@@ -50,7 +55,13 @@ export const WrapperOnloadCmt = styled.div`
   border-radius: ${BORDER_RADIUS};
   border: 1px black solid;
   transition: 0.3s;
+<<<<<<< HEAD
+  height: 850px;
+  overflow-y: auto;
+  overflow-x: hidden;
+=======
 
+>>>>>>> main
   [data-theme='dark'] & {
     background: var(--secondary-background-color);
   }
@@ -111,6 +122,13 @@ export const ImageWrap = styled.div`
   display: flex;
   justify-content: center;
   overflow: hidden;
+  height: 30rem;
+`;
+export const ImageWrap2 = styled.div`
+  width: 45rem;
+  display: flex;
+  justify-content: center;
+
   height: 30rem;
 `;
 
@@ -217,6 +235,27 @@ export const Description = styled.div`
 
   @media only screen and ${media.xxl} {
     font-size: 1rem;
+  }
+`;
+export const DescriptionHide = styled.div`
+  font-size: ${FONT_SIZE.xs};
+  color: var(--text-main-color);
+
+  overflow: hidden;
+  max-height: 300px;
+  line-height: 16px;
+  position: relative;
+  word-wrap: break-word;
+  @media only screen and ${media.xxl} {
+    font-size: 1rem;
+  }
+
+  :after {
+    content: '...';
+
+    position: absolute;
+    right: 8px;
+    bottom: 0px;
   }
 `;
 export const Hashtag = styled.div`

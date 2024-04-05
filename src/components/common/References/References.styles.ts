@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import React from 'react';
+import styled from '@emotion/styled';
+import { ComponentType } from 'react';
 import { media } from '@app/styles/themes/constants';
 
 export const ReferencesWrapper = styled.div`
@@ -39,9 +39,7 @@ export const Icons = styled.div`
   flex-wrap: nowrap;
 `;
 
-type ReturnType<T> = (props: T) => JSX.Element;
-
-export function withStyles<T>(Component: React.ComponentType<T>): ReturnType<T> {
+export function withStyles<T>(Component: ComponentType<T>): any {
   return styled(Component)`
     font-size: 2rem;
     margin-left: 0.5rem;

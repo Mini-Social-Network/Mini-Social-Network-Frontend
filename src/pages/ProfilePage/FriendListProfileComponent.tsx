@@ -6,6 +6,19 @@ import * as s from './Tables.styles';
 import RecentActivityFeed from './RecentActivityFeed';
 import profilePageService from './ProfilePageServicce';
 import { notificationController } from '@app/controllers/notificationController';
+<<<<<<< HEAD
+import { Text } from '@app/components/layouts/AuthLayout/AuthLayout.styles';
+import { Title } from '../DashBoard/Tables.styles';
+import { useTranslation } from 'react-i18next';
+
+const FriendList: React.FC = () => {
+  const [friendList, setFriendList] = useState([]);
+  const [friendListRequest, setFriendListRequest] = useState<any[]>([]);
+  const [activity, setActivity] = useState<any[]>([]);
+  const [filteredActivity, setFilteredActivity] = useState<any[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const { t } = useTranslation();
+=======
 
 const FriendList: React.FC = () => {
   const [friendList, setFriendList] = useState([]);
@@ -13,6 +26,7 @@ const FriendList: React.FC = () => {
   const [filteredActivity, setFilteredActivity] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
 
+>>>>>>> main
   const [filters, setFilters] = useState<any>({
     status: [],
   });
@@ -40,10 +54,17 @@ const FriendList: React.FC = () => {
   useEffect(() => {
     ProfilePageService.getListFriend().then((res: any) => {
       setFriendList(res.data);
+      ProfilePageService.getListRequest().then((res: any) => {
+        setFriendListRequest(res.data.Reciver);
+      });
     });
   }, []);
   const unfriendById = (id: number) => {
+<<<<<<< HEAD
+    ProfilePageService.updateFriend(id, 'unfriend').then((res) => {
+=======
     ProfilePageService.unFriend(id, 'unfriend').then((res) => {
+>>>>>>> main
       if (res.data) {
         setTimeout(() => {
           notificationController.success({ message: 'Unfriend success' });
@@ -56,10 +77,66 @@ const FriendList: React.FC = () => {
       }
     });
   };
+<<<<<<< HEAD
+  const acpfriendById = (id: number) => {
+    ProfilePageService.updateFriend(id, 'friend').then((res) => {
+      if (res.data) {
+        setTimeout(() => {
+          notificationController.success({ message: 'Add friend success' });
+          ProfilePageService.getListRequest().then((res) => {
+            console.log(res.data);
+            setHasMore(false);
+            setFriendListRequest(res.data.Reciver);
+          });
+        }, 1000);
+      }
+    });
+  };
+  const cancelAcpfriendById = (id: number) => {
+    ProfilePageService.updateFriend(id, 'unfriend').then((res) => {
+      if (res.data) {
+        setTimeout(() => {
+          notificationController.success({ message: 'Unfriend success' });
+          ProfilePageService.getListRequest().then((res) => {
+            console.log(res.data);
+            setHasMore(false);
+            setFriendListRequest(res.data.Reciver);
+          });
+        }, 1000);
+      }
+    });
+  };
+  return (
+    <s.Card>
+      <Row style={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}>
+        <Col span={8}>
+          <Title level={3}>{t('mini.friendList')}</Title>
+          <RecentActivityFeed
+            unfriend={unfriendById}
+            activity={activity}
+            hasMore={hasMore}
+            next={next}
+            acpfriend={acpfriendById}
+            cancelacpfriend={cancelAcpfriendById}
+          />
+        </Col>
+        <Col span={8}>
+          <Title level={3}>{t('mini.friendListReq')}</Title>
+          <RecentActivityFeed
+            unfriend={unfriendById}
+            activity={friendListRequest}
+            hasMore={hasMore}
+            next={next}
+            acpfriend={acpfriendById}
+            cancelacpfriend={cancelAcpfriendById}
+          />
+        </Col>
+=======
   return (
     <s.Card title="List Friend">
       <Row style={{ width: '100%' }}>
         <RecentActivityFeed unfriend={unfriendById} activity={activity} hasMore={hasMore} next={next} />
+>>>>>>> main
       </Row>
     </s.Card>
   );

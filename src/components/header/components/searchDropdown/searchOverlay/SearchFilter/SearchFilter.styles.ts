@@ -1,6 +1,7 @@
 import { media } from '@app/styles/themes/constants';
 import { Checkbox } from 'antd';
-import styled, { css } from 'styled-components';
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 
 interface FilterWrapperProps {
   isVisible: boolean;

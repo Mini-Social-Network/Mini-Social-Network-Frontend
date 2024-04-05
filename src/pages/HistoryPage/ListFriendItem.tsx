@@ -49,7 +49,11 @@ export const ListFriendItem: React.FC<Activity> = ({
               cancelacpfriend(id);
             }}
           >
+<<<<<<< HEAD
+            {t('mini.cancel')}
+=======
             Huỷ lời mời
+>>>>>>> main
           </Button>
         );
       case 2:
@@ -60,7 +64,11 @@ export const ListFriendItem: React.FC<Activity> = ({
               unfriend(id);
             }}
           >
+<<<<<<< HEAD
+            {t('mini.unfr')}
+=======
             Huỷ kết bạn
+>>>>>>> main
           </Button>
         );
       case 3:
@@ -73,7 +81,11 @@ export const ListFriendItem: React.FC<Activity> = ({
                 acpfriend(id);
               }}
             >
+<<<<<<< HEAD
+              {t('mini.acptfr')}
+=======
               Chấp nhận
+>>>>>>> main
             </Button>
             <Button
               size={'small'}
@@ -82,7 +94,11 @@ export const ListFriendItem: React.FC<Activity> = ({
               }}
               danger
             >
+<<<<<<< HEAD
+              {t('mini.cancel')}
+=======
               Xoá
+>>>>>>> main
             </Button>
           </>
         );
@@ -96,7 +112,11 @@ export const ListFriendItem: React.FC<Activity> = ({
               addfriend(id);
             }}
           >
+<<<<<<< HEAD
+            {t('mini.addfr')}
+=======
             Kết bạn
+>>>>>>> main
           </Button>
         );
     }
@@ -104,7 +124,11 @@ export const ListFriendItem: React.FC<Activity> = ({
   return (
     <s.ActivityCard bodyStyle={{ padding: '25px  10px' }}>
       <s.Wrapper>
+<<<<<<< HEAD
+        <s.ImgWrapper onClick={() => navigate(`/profile-page/${id}`)}>
+=======
         <s.ImgWrapper>
+>>>>>>> main
           <img
             src={imageUrl ? `http://localhost:8081/local-store/${imageUrl}` : dfavt}
             alt={`title ${imageUrl ? imageUrl : 'dfavt'}`}
@@ -115,15 +139,25 @@ export const ListFriendItem: React.FC<Activity> = ({
 
         <s.InfoWrapper>
           <s.InfoHeaderWrapper>
+<<<<<<< HEAD
+            <s.TitleWrapper onClick={() => navigate(`/profile-page/${id}`)}>
+=======
             <s.TitleWrapper>
+>>>>>>> main
               <s.Title level={5}>
                 {name} {isExpert ? <CheckCircleTwoTone /> : null}
               </s.Title>
             </s.TitleWrapper>
 
+<<<<<<< HEAD
+            <s.TextCard onClick={() => navigate(`/profile-page/${id}`)}>{email}</s.TextCard>
+            {isExpert ? (
+              <span onClick={() => navigate(`/profile-page/${id}`)}>
+=======
             <s.TextCard>{email}</s.TextCard>
             {isExpert ? (
               <span>
+>>>>>>> main
                 <Rate disabled style={{ fontSize: '1rem' }} defaultValue={expertInfo.rating} />
                 {expertInfo.ratingCount ? (
                   <span style={{ fontSize: '0.8rem' }} className="ant-rate-text">
@@ -153,7 +187,11 @@ export const ListFriendItem: React.FC<Activity> = ({
                 }
               }}
             >
+<<<<<<< HEAD
+              {t('mini.chat')}
+=======
               Chat
+>>>>>>> main
             </Button>
           </s.InfoHeaderWrapper>
         </s.InfoWrapper>
@@ -167,7 +205,11 @@ export const ListFriendItem: React.FC<Activity> = ({
               subexpert(id);
             }}
           >
+<<<<<<< HEAD
+            {isSubcribed ? t('mini.unsub') : t('mini.sub')}
+=======
             {isSubcribed ? 'Huỷ Đăng ký' : 'Đăng ký'}
+>>>>>>> main
           </Button>
         ) : null}
         {isExpert ? (
@@ -187,7 +229,11 @@ export const ListFriendItem: React.FC<Activity> = ({
               addfriend(id);
             }}
           >
+<<<<<<< HEAD
+            {t('mini.addfr')}
+=======
             Kết bạn
+>>>>>>> main
           </Button>
         )}
       </s.WrapperBtn>

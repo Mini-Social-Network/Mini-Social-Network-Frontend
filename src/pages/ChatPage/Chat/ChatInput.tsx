@@ -5,9 +5,10 @@ import { BsEmojiSmileFill } from 'react-icons/bs';
 import { IoMdSend } from 'react-icons/io';
 import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading';
 import cameraImage from '@app/assets/camera.png';
+import { useTranslation } from 'react-i18next';
 
 interface ChatInputProps {
-  handleSendMessage: (msg: string, img: string) => {};
+  handleSendMessage: (msg: string, img: string) => any;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ handleSendMessage }) => {
@@ -43,11 +44,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ handleSendMessage }) => {
   const handleError = (errors: any, _: any) => {
     console.log(errors);
   };
-
+  const { t } = useTranslation();
   return (
     <Container>
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
-        <input type="text" placeholder="type your message here" onChange={(e) => setMsg(e.target.value)} value={msg} />
+        <input type="text" placeholder={t('mini.ibhere')} onChange={(e) => setMsg(e.target.value)} value={msg} />
 
         <button type="submit">
           <IoMdSend />

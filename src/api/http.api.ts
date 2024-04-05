@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AxiosError } from 'axios';
+import { AxiosError, InternalAxiosRequestConfig, AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
 import { ApiError } from '@app/api/ApiError';
 import { readToken } from '@app/services/localStorage.service';
 
@@ -8,13 +8,13 @@ export const httpApi = axios.create({
 });
 
 httpApi.interceptors.request.use((config) => {
-  config.headers = { ...config.headers, Authorization: `Bearer ${readToken()}` };
+  config.headers = { ...config.headers, Authorization: `Bearer ${readToken()}` } as AxiosRequestHeaders;
 
   return config;
 });
 
 httpApi.interceptors.response.use(undefined, (error: AxiosError) => {
-  throw new ApiError<ApiErrorData>(error.response?.data.message || error.message, error.response?.data);
+  throw new ApiError<ApiErrorData>("" || error.message);
 });
 
 export interface ApiErrorData {

@@ -19,17 +19,26 @@ import { number } from 'echarts';
 import { Panel } from '@app/components/common/Collapse/Collapse';
 import dfavt from '@app/share/dfavt.png';
 import { CheckCircleTwoTone } from '@ant-design/icons';
+<<<<<<< HEAD
+import { useNavigate } from 'react-router-dom';
+=======
+>>>>>>> main
 
 const Dashboard: React.FC = () => {
   const [news, setNews] = useState<any[]>([]);
   const [experts, setExperts] = useState<any[]>([]);
+<<<<<<< HEAD
+  const [topPost, setTopPost] = useState<any>();
+=======
   const [topPost, setTopPost] = useState<any[]>([]);
+>>>>>>> main
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [nextOffset, setNextOffset] = useState<number>(0);
   const [openPostUpload, setOpenPostUpload] = useState<boolean>(false);
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const getAllData = () => {
     setLoaded(true);
@@ -39,7 +48,11 @@ const Dashboard: React.FC = () => {
       } else {
         setHasMore(true);
         if (data !== null) {
+<<<<<<< HEAD
+          setNews([...news, ...data.data]);
+=======
           setNews((oldNews) => [...oldNews, ...data.data]);
+>>>>>>> main
           setLoaded(false);
           setNextOffset([...news, ...data.data].length);
         }
@@ -50,13 +63,21 @@ const Dashboard: React.FC = () => {
     setLoaded(true);
     dbService.get10Post(nextOffset).then((data: any) => {
       if (data !== null) {
+<<<<<<< HEAD
+        setNews([...news, ...data.data]);
+=======
         setNews((oldNews) => [...oldNews, ...data.data]);
+>>>>>>> main
         setLoaded(false);
         setNextOffset([...news, ...data.data].length);
       }
     });
     dbService.getAllExpert().then((res: any) => {
+<<<<<<< HEAD
+      if (res?.data?.length > 0) {
+=======
       if (res?.data !== null) {
+>>>>>>> main
         setExperts(res.data);
       }
     });
@@ -71,9 +92,10 @@ const Dashboard: React.FC = () => {
   }, []);
   const getnew = () => {
     setLoaded(true);
+    setOpenPostUpload(false);
     dbService.get10Post(0).then((data: any) => {
       if (data !== null) {
-        setNews((oldNews) => [...oldNews, ...data.data]);
+        setNews([...news, ...data.data]);
       }
       setLoaded(false);
     });
@@ -87,17 +109,43 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
+      <PageTitle>{t('mini.news')}</PageTitle>
+
       <s.TablesWrapper>
         <div
           style={{
             position: 'fixed',
             top: '9rem',
+<<<<<<< HEAD
+            right: '3.5rem',
+=======
             right: '5rem',
+>>>>>>> main
 
             zIndex: 2,
           }}
         >
           <Button
+<<<<<<< HEAD
+            style={{ float: 'right', marginBottom: '10px', width: '130px' }}
+            onClick={() => setOpenPostUpload(true)}
+          >
+            {t('mini.upload')}
+          </Button>
+        </div>
+
+        <s.Card title={t('mini.news')} style={{ zIndex: 1 }}>
+          <Row style={{ display: 'flex', justifyContent: 'center' }}>
+            <Col span={10}>
+              <Carousel autoplay>
+                {experts?.map((expert, index) => {
+                  return (
+                    <s.ActivityCard
+                      bodyStyle={{ padding: '25px  10px' }}
+                      onClick={() => navigate(`/profile-page/${expert.id}`)}
+                      key={index}
+                    >
+=======
             style={{ float: 'right', marginBottom: '10px', width: '100px' }}
             onClick={() => setOpenPostUpload(true)}
           >
@@ -112,6 +160,7 @@ const Dashboard: React.FC = () => {
                 {experts.map((expert) => {
                   return (
                     <s.ActivityCard bodyStyle={{ padding: '25px  10px' }}>
+>>>>>>> main
                       <s.Wrapper>
                         <s.ImgWrapper>
                           <img
@@ -151,6 +200,15 @@ const Dashboard: React.FC = () => {
                 })}
               </Carousel>
               <Collapse defaultActiveKey={['1']} onChange={onChange}>
+<<<<<<< HEAD
+                <Panel header={t('mini.mostcmt')} key="1">
+                  {topPost?.mostComment?.map((post: any, index: any) => {
+                    return (
+                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }} key={`mostComment ${index}`}>
+                        <s.Wrapper>
+                          <s.ImgWrapper>
+                            {post.imageList?.map((img: string, index: any) => (
+=======
                 <Panel header="Top bài viết nhiều bình luận nhất" key="1">
                   {topPost?.mostComment?.map((post: any) => {
                     return (
@@ -158,11 +216,17 @@ const Dashboard: React.FC = () => {
                         <s.Wrapper>
                           <s.ImgWrapper>
                             {post.imageList?.map((img: string) => (
+>>>>>>> main
                               <Image
                                 src={`http://localhost:8081/local-store/${img}`}
                                 alt={`title ${img ? img : 'dfavt'}`}
                                 width={100}
                                 height={100}
+<<<<<<< HEAD
+                                preview={false}
+                                key={`mostComment Img ${index}`}
+=======
+>>>>>>> main
                               />
                             ))}
                           </s.ImgWrapper>
@@ -180,6 +244,15 @@ const Dashboard: React.FC = () => {
                     );
                   })}
                 </Panel>
+<<<<<<< HEAD
+                <Panel header={t('mini.mostview')} key="2">
+                  {topPost?.mostView?.map((post: any, index: any) => {
+                    return (
+                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }} key={`mostView ${index}`}>
+                        <s.Wrapper>
+                          <s.ImgWrapper>
+                            {post.imageList?.map((img: string, index: any) => (
+=======
                 <Panel header="Top bài viết nhiều lượt xem nhất" key="2">
                   {topPost?.mostView?.map((post: any) => {
                     return (
@@ -187,11 +260,17 @@ const Dashboard: React.FC = () => {
                         <s.Wrapper>
                           <s.ImgWrapper>
                             {post.imageList?.map((img: string) => (
+>>>>>>> main
                               <Image
                                 src={`http://localhost:8081/local-store/${img}`}
                                 alt={`title ${img ? img : 'dfavt'}`}
                                 width={100}
                                 height={100}
+<<<<<<< HEAD
+                                preview={false}
+                                key={`mostView img ${index}`}
+=======
+>>>>>>> main
                               />
                             ))}
                           </s.ImgWrapper>
@@ -209,6 +288,15 @@ const Dashboard: React.FC = () => {
                     );
                   })}
                 </Panel>
+<<<<<<< HEAD
+                <Panel header={t('mini.mostlike')} key="3">
+                  {topPost?.mostLike?.map((post: any, index: any) => {
+                    return (
+                      <s.ActivityCard bodyStyle={{ padding: '0px  10px' }} key={`mostLike  ${index}`}>
+                        <s.Wrapper>
+                          <s.ImgWrapper>
+                            {post.imageList?.map((img: string, index: any) => (
+=======
                 <Panel header="Top bài viết nhiều lượt thích nhất" key="3">
                   {topPost?.mostLike?.map((post: any) => {
                     return (
@@ -216,11 +304,17 @@ const Dashboard: React.FC = () => {
                         <s.Wrapper>
                           <s.ImgWrapper>
                             {post.imageList?.map((img: string) => (
+>>>>>>> main
                               <Image
                                 src={`http://localhost:8081/local-store/${img}`}
                                 alt={`title ${img ? img : 'dfavt'}`}
                                 width={100}
                                 height={100}
+<<<<<<< HEAD
+                                preview={false}
+                                key={`mostLike  img ${index}`}
+=======
+>>>>>>> main
                               />
                             ))}
                           </s.ImgWrapper>
@@ -249,6 +343,10 @@ const Dashboard: React.FC = () => {
                         <ArticleCard
                           key={post.id}
                           idPost={post.id}
+<<<<<<< HEAD
+                          idUser={post.user.id}
+=======
+>>>>>>> main
                           title={post.title}
                           description={post.context}
                           date={post.createAt}
@@ -263,6 +361,10 @@ const Dashboard: React.FC = () => {
                           isDisLike={post.isDislike}
                           commentCount={post.commentCount}
                           isExpert={post.user.isExpert}
+<<<<<<< HEAD
+                          viewCount={post.viewCount}
+=======
+>>>>>>> main
                         />
                       ))}
                     </Feed>
@@ -276,7 +378,7 @@ const Dashboard: React.FC = () => {
         </s.Card>
       </s.TablesWrapper>
       <Modal
-        title="Upload Post"
+        title={t('mini.upload')}
         visible={openPostUpload}
         onCancel={() => setOpenPostUpload(false)}
         footer={[
@@ -287,7 +389,7 @@ const Dashboard: React.FC = () => {
           </>,
         ]}
       >
-        <ValidationForm getnew={getnew} />
+        <ValidationForm />
       </Modal>
     </>
   );

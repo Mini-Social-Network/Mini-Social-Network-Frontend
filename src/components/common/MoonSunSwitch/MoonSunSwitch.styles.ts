@@ -1,6 +1,7 @@
 import { BORDER_RADIUS } from '@app/styles/themes/constants';
 import { Button } from 'components/common/buttons/Button/Button';
-import styled, { css } from 'styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 interface BtnProps {
   $isFirstActive: boolean;

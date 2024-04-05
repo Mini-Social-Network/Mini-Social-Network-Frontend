@@ -9,6 +9,7 @@ import {
   AuditOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 export interface SidebarNavigationItem {
   title: string;
@@ -21,49 +22,56 @@ export interface SidebarNavigationItem {
 
 export const sidebarNavigation: SidebarNavigationItem[] = [
   {
-    title: 'Dashboard',
+    title: 'mini.homePage',
     key: 'dashboard',
     url: '/dashboard',
     icon: <HomeOutlined />,
     adminCheck: false,
   },
   {
-    title: 'List Friend',
+    title: 'mini.findPort',
+    key: 'findpostpage',
+    url: '/find-post-page',
+    icon: <IdcardOutlined />,
+    adminCheck: false,
+  },
+  {
+    title: 'mini.comunication',
     key: 'listfriend',
     url: '/list-friend',
     icon: <ContactsOutlined />,
     adminCheck: false,
   },
   {
-    title: 'Chat Center',
+    title: 'mini.inbox',
     key: 'chat-center',
     url: '/chat-center',
     icon: <MessageOutlined />,
     adminCheck: false,
   },
   {
-    title: 'Profile Page',
+    title: 'mini.profile',
     key: 'profilepage',
     url: '/profile-page',
     icon: <IdcardOutlined />,
     adminCheck: false,
   },
   {
-    title: 'User Mangager Page',
+    title: 'Quản lý người dùng',
     key: 'userpage',
     url: '/user-page',
     icon: <UserOutlined />,
     adminCheck: true,
   },
   {
-    title: 'Post Mangager Page',
+    title: 'Quản lý bài viết',
     key: 'postpage',
     url: '/post-page',
     icon: <UnorderedListOutlined />,
     adminCheck: true,
   },
   {
-    title: 'Topic Mangager Page',
+    title: 'Quản lý thẻ chủ đề',
     key: 'topicpage',
     url: '/topic-page',
     icon: <TagsOutlined />,

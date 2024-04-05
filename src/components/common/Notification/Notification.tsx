@@ -3,6 +3,11 @@ import { Space } from 'antd';
 import { CheckCircleFilled, ExclamationCircleFilled, InfoCircleFilled, WarningFilled } from '@ant-design/icons';
 import * as S from './Notification.styles';
 import notificationService from './NotificationsService';
+<<<<<<< HEAD
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> main
 interface Icons {
   info: React.ReactNode;
   success: React.ReactNode;
@@ -20,9 +25,26 @@ interface NotificationProps {
   description?: React.ReactNode;
   mentionIconSrc?: React.ReactNode;
   status: number;
+<<<<<<< HEAD
+  typePost: string;
+  param: string;
+}
+
+export const Notification: React.FC<NotificationProps> = ({
+  type,
+  mentionIconSrc,
+  title,
+  description,
+  status,
+  id,
+  typePost,
+  param,
+}) => {
+=======
 }
 
 export const Notification: React.FC<NotificationProps> = ({ type, mentionIconSrc, title, description, status, id }) => {
+>>>>>>> main
   const icons: Icons = {
     info: <InfoCircleFilled />,
     success: <CheckCircleFilled />,
@@ -30,23 +52,43 @@ export const Notification: React.FC<NotificationProps> = ({ type, mentionIconSrc
     error: <WarningFilled />,
     mention: mentionIconSrc,
   };
-
+  const navigate = useNavigate();
   const icon = icons[type] || icons.warning;
   const read = (id: number) => {
     !status && notificationService.read(id);
   };
+<<<<<<< HEAD
+  const { t } = useTranslation();
+
+=======
+>>>>>>> main
   return (
     <S.SpaceWrapper
       type={type}
       align="start"
       size="middle"
       style={{ background: status ? '#f5f5f5' : `var(--background-color)`, width: '23rem' }}
+<<<<<<< HEAD
+      onClick={() => {
+        read(id);
+        if (typePost === 'post') {
+          const id = parseInt(param);
+          navigate(`/detail`, {
+            state: id,
+          });
+        }
+        if (typePost === 'contact') {
+          navigate(`/profile-page/${id}`);
+        }
+      }}
+=======
       onClick={() => read(id)}
+>>>>>>> main
     >
       {mentionIconSrc ? <S.NotificationIcon src={icon} alt="User icon" /> : icon}
       <Space direction="vertical">
         <S.Title>{title}</S.Title>
-        <S.Description>{description}</S.Description>
+        <S.Description>{t('mini.had')} {t(`${description}`)}</S.Description>
       </Space>
     </S.SpaceWrapper>
   );

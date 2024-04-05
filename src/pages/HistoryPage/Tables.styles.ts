@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 import { Col, Typography } from 'antd';
 import { Card as BaseCard } from '@app/components/common/Card/Card';
 import { FONT_SIZE, media, FONT_FAMILY } from '@app/styles/themes/constants';

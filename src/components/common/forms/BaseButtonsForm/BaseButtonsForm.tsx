@@ -25,7 +25,7 @@ export const BaseButtonsForm: BaseFormInterface<BaseButtonsFormProps> = ({
   const currentForm = form || formDefault;
 
   const onCancel = () => {
-    currentForm?.resetFields();
+    currentForm.resetFields();
     setFieldsChanged && setFieldsChanged(false);
   };
 

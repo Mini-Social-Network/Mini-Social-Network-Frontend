@@ -1,3 +1,4 @@
+import React from 'react';
 import { Upload as AntdUpload, UploadProps } from 'antd';
 import * as S from './Upload.styles';
 

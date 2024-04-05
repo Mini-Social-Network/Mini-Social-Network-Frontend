@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import { CloseOutlined } from '@ant-design/icons';
 import { TagSpan } from 'react-trello/dist/styles/Base';
 import { FONT_SIZE } from '@app/styles/themes/constants';

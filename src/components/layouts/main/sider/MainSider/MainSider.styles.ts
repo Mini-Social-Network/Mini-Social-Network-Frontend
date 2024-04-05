@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react'
 import { Button, Layout } from 'antd';
 import { Link } from 'react-router-dom';
 import { media } from '@app/styles/themes/constants';

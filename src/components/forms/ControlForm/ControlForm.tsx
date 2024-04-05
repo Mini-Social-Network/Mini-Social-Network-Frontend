@@ -83,7 +83,7 @@ export const ControlForm: React.FC = () => {
           // eslint-disable-next-line
           shouldUpdate={(prevValues: any, curValues: any) => prevValues.users !== curValues.users}
         >
-          {({ getFieldValue }) => {
+          {({ getFieldValue }: { getFieldValue: (name: string) => any }) => {
             const users: UserType[] = getFieldValue('users') || [];
             return users.length ? (
               <S.List>

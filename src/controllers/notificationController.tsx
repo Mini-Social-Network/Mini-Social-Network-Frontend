@@ -1,6 +1,6 @@
 import React from 'react';
 import { notification } from 'antd';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { CheckCircleFilled, ExclamationCircleFilled, InfoCircleFilled, StopFilled } from '@ant-design/icons';
 import { ArgsProps } from 'antd/lib/notification';
 

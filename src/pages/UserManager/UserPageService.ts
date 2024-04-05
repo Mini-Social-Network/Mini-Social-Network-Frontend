@@ -16,6 +16,23 @@ class UserService extends BaseService<any> {
   public GetUsers(data: any) {
     return this.fetch.post(`/user/external/findAll?offset=0`, data);
   }
+<<<<<<< HEAD
+
+  public AddUser(data: any) {
+    return this.fetch.post(`/user/external/create`, data);
+  }
+  public UpdateUser(data: any) {
+    return this.fetch.post(`/user/external/update`, data);
+  }
+
+  public DelUsers(id: number) {
+    return this.fetch.post(`/user/external/delete?id=${id}`);
+  }
+  public GetReport(data: any) {
+    return this.fetch.post(`/user/external/findAllReport?offset=0`, data);
+  }
+=======
+>>>>>>> main
 }
 
 const userService = new UserService();

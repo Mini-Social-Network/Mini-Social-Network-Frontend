@@ -20,10 +20,18 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
   setNotifications,
   ...props
 }) => {
+<<<<<<< HEAD
+  const { t } = useTranslation();
+  const noticesList = useMemo(
+    () =>
+      notifications.map((notification, index) => {
+        const type = notificationsSeverities.find((dbSeverity) => dbSeverity.name === notification.userName)?.name;
+=======
   const noticesList = useMemo(
     () =>
       notifications.map((notification, index) => {
         const type = notificationsSeverities.find((dbSeverity) => dbSeverity.name === notification.name)?.name;
+>>>>>>> main
 
         return (
           <Notification
@@ -34,6 +42,11 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
             mentionIconSrc={notification.userIcon}
             status={notification.status}
             id={notification.id}
+<<<<<<< HEAD
+            param={notification.param}
+            typePost={notification.typePost}
+=======
+>>>>>>> main
           />
         );
       }),
@@ -49,7 +62,11 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
               {noticesList}
             </Space>
           ) : (
+<<<<<<< HEAD
+            <S.Text>{t('mini.noti')}</S.Text>
+=======
             <S.Text>Không có thông báo</S.Text>
+>>>>>>> main
           )}
         </Col>
         <Col span={24}>
@@ -63,7 +80,11 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
                     notificationsService.DeleteNotifiCations();
                   }}
                 >
+<<<<<<< HEAD
+                  {t('mini.readDone')}
+=======
                   Đã đọc hết
+>>>>>>> main
                 </S.Btn>
               </Col>
             )}

@@ -1,7 +1,7 @@
 import { Row, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BaseButtonsForm } from '@app/components/common/forms/BaseButtonsForm/BaseButtonsForm';
 import { InputNumber } from '@app/components/common/inputs/InputNumber/InputNumber';
 import { Select, Option } from '@app/components/common/selects/Select/Select';
@@ -14,7 +14,7 @@ import { Rate } from '@app/components/common/Rate/Rate';
 import { Checkbox, CheckboxGroup } from '@app/components/common/Checkbox/Checkbox';
 import { notificationController } from '@app/controllers/notificationController';
 import { BaseForm } from '@app/components/common/forms/BaseForm/BaseForm';
-import { Input } from '@app/components/common/inputs/Input/Input';
+import { Input, TextArea } from '@app/components/common/inputs/Input/Input';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import fromService from './FormService';
 
@@ -33,7 +33,7 @@ interface DBProps {
   getnew: any;
 }
 
-export const ValidationForm: React.FC<DBProps> = ({ getnew }) => {
+export const ValidationForm: React.FC = ({}) => {
   const [isFieldsChanged, setFieldsChanged] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -59,8 +59,8 @@ export const ValidationForm: React.FC<DBProps> = ({ getnew }) => {
   };
   useEffect(() => {
     fromService.getAllTopicTag().then((res: any) => {
-      let topic: any[] = [];
-      res?.data.forEach((i: any) => {
+      const topic: any[] = [];
+      res.data.forEach((i: any) => {
         topic.push({ value: i.id, label: i.tagName });
       });
       setTopicList(topic);
@@ -70,8 +70,6 @@ export const ValidationForm: React.FC<DBProps> = ({ getnew }) => {
   const handleUpload = async () => {
     const formData = new FormData();
     setLoading(true);
-
-    let idCardBase64 = '';
 
     await getBase64(fileList, (result: string) => {
       const formData = {
@@ -83,10 +81,11 @@ export const ValidationForm: React.FC<DBProps> = ({ getnew }) => {
       };
       fromService.upLoadPost(formData).then((data: any) => {
         if (data.status === 1) {
+          form.resetFields();
           setTimeout(() => {
             setLoading(false);
             setFieldsChanged(false);
-            getnew();
+            //getnew();
             notificationController.success({ message: 'Upload success' });
           }, 1000);
         }
@@ -121,19 +120,39 @@ export const ValidationForm: React.FC<DBProps> = ({ getnew }) => {
   };
   return (
     <BaseForm form={form} layout="vertical" name="contentForm">
-      <BaseForm.Item name="Title" label="Title" rules={[{ required: true, message: t('common.requiredField') }]}>
+      <BaseForm.Item
+        name="Title"
+        label={t('mini.title')}
+        rules={[{ required: true, message: t('common.requiredField') }]}
+      >
         <Input onChange={(event) => setTitle(event.target.value)} />
       </BaseForm.Item>
-      <BaseForm.Item name="Context" label="Context" rules={[{ required: true, message: t('common.requiredField') }]}>
-        <Input onChange={(event) => setContext(event.target.value)} />
+      <BaseForm.Item
+        name="Context"
+        label={t('mini.context')}
+        rules={[{ required: true, message: t('common.requiredField') }]}
+      >
+        <TextArea rows={4} onChange={(event) => setContext(event.target.value)} />
       </BaseForm.Item>
-      <BaseForm.Item name="HashTag" label="HashTag" rules={[{ required: true, message: t('common.requiredField') }]}>
+      <BaseForm.Item
+        name="HashTag"
+        label={t('mini.hangtag')}
+        rules={[{ required: true, message: t('common.requiredField') }]}
+      >
         <Input onChange={(event) => setHashTag(event.target.value)} />
       </BaseForm.Item>
-      <BaseForm.Item name="Topic" label="Topic" rules={[{ required: true, message: t('common.requiredField') }]}>
-        <Select style={{ width: 120 }} onChange={(value) => setTopic(value)} options={topicList} />
+      <BaseForm.Item
+        name="Topic"
+        label={t('mini.topic')}
+        rules={[{ required: true, message: t('common.requiredField') }]}
+      >
+        <Select style={{ width: 120 }} onChange={(value) => setTopic(value as string)} options={topicList} />
       </BaseForm.Item>
-      <BaseForm.Item name="image" label="Attach Image" rules={[{ required: true, message: t('common.requiredField') }]}>
+      <BaseForm.Item
+        name="image"
+        label={t('mini.attachimg')}
+        rules={[{ required: true, message: t('common.requiredField') }]}
+      >
         <Upload name="logo" {...props} listType="picture-card">
           <Button type="default" disabled={fileList.length > 1}>
             <UploadOutlined />
@@ -146,7 +165,7 @@ export const ValidationForm: React.FC<DBProps> = ({ getnew }) => {
           loading={uploading}
           style={{ marginTop: 16, width: '100%' }}
         >
-          Upload Post
+          {t('mini.upload')}
         </Button>
       </BaseForm.Item>
     </BaseForm>

@@ -4,6 +4,8 @@ import chatService from './ChatService';
 import ChatInput from './ChatInput';
 import { v4 as uuidv4 } from 'uuid';
 import loading from '@app/assets/loader.gif';
+import moment from 'moment';
+import 'moment/locale/vi';
 import {
   StompSessionProvider,
   useStompClient,
@@ -13,6 +15,8 @@ import {
 } from 'react-stomp-hooks';
 
 import defaultAvatar from '@app/assets/DefaultAvatar.png';
+import { Button } from 'antd';
+import { notificationController } from '@app/controllers/notificationController';
 
 interface ChatContainerProps {
   currentChat: any;
@@ -20,6 +24,12 @@ interface ChatContainerProps {
   socket: any;
   topicContactId: any;
   handleChatUpdate: any;
+<<<<<<< HEAD
+  block: any;
+  unblock: any;
+  changeChat: any;
+=======
+>>>>>>> main
 }
 export interface Message {
   fromSelf: boolean;
@@ -27,6 +37,7 @@ export interface Message {
   image?: string;
   user: User | undefined;
   isFile: boolean;
+  createAt: Date;
 }
 
 export interface User {
@@ -40,18 +51,40 @@ export interface User {
   topicId: string;
 }
 
+<<<<<<< HEAD
+const ChatContainer: React.FC<ChatContainerProps> = ({
+  handleChatUpdate,
+  currentChat,
+  currentUser,
+  socket,
+  block,
+  unblock,
+  changeChat,
+}) => {
+=======
 const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, currentChat, currentUser, socket }) => {
+>>>>>>> main
   const [messages, setMessages] = useState<Message[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<Message>();
   const [isLoading, setIsLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const stompClient = useStompClient();
 
+  function daysIntoYear(date: Date) {
+    return (
+      (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) /
+      24 /
+      60 /
+      60 /
+      1000
+    );
+  }
+
   useEffect(() => {
     const getMsg = async () => {
       if (currentChat && currentUser) {
         const response = await chatService.getAllMessages(currentChat.topicContactId);
-        response.data?.map((item: Message) => {
+        response.data.map((item: Message) => {
           if (item?.user?.id === currentUser?.id) {
             item.fromSelf = true;
           }
@@ -64,8 +97,47 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
     //
   }, [currentChat, currentChat._id, currentUser]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      const elem = document.getElementById('chat-messages');
+      if (elem) elem.scrollTop = elem.scrollHeight;
+    }, 100);
+  }, [messages, currentChat]);
+
   useSubscription(`/topic/chat/${currentChat.topicContactId}`, (message: any) => {
     const body = JSON.parse(message.body);
+<<<<<<< HEAD
+    console.log(body, parseInt(body?.data ? body?.data : 0), currentUser?.id);
+    if (body.status === 1) {
+      if (body?.data?.isFile) {
+        setArrivalMessage({
+          fromSelf: body.data.user.id === currentUser?.id ? true : false,
+          content: '',
+          image: `http://localhost:8081/local-store/${body.data.content}`,
+          user: body.data.user.id,
+          isFile: true,
+          createAt: new Date()
+        });
+      } else {
+        setArrivalMessage({
+          fromSelf: body.data.user.id === currentUser?.id ? true : false,
+          content: body.data.content as string,
+          user: body.data.user.id,
+          isFile: true,
+          createAt: new Date()
+        });
+      }
+      const data = currentChat;
+      data.blocked = false;
+      changeChat(data);
+    } else {
+      if ((body?.data ? body?.data : 0) === currentUser?.id) {
+        const data = currentChat;
+        data.blocked = true;
+        changeChat(data);
+        notificationController.success({ message: 'Bạn đã bị chặn' });
+      }
+=======
     console.log(body);
     if (body.data.isFile) {
       setArrivalMessage({
@@ -80,6 +152,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
         content: body.data.content,
         user: body.data.user.id,
       });
+>>>>>>> main
     }
   });
   useEffect(() => {
@@ -95,7 +168,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
   }, [arrivalMessage]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    (scrollRef.current as HTMLDivElement).scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSendMessage = async (msg: string, image: string) => {
@@ -144,6 +217,29 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
           <div className="username">
             <h3>{currentChat?.userFriend?.name}</h3>
           </div>
+          {currentChat.blocked ? (
+            <div className="Block" />
+          ) : (
+            <div className="Block">
+              {currentChat.block ? (
+                <Button
+                  onClick={() => {
+                    unblock(currentChat.topicContactId, currentChat.userFriend.id);
+                  }}
+                >
+                  Bỏ Chặn
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    block(currentChat.topicContactId, currentChat.userFriend.id);
+                  }}
+                >
+                  Chặn
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
       {isLoading ? (
@@ -151,41 +247,86 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ handleChatUpdate, current
           <img src={loading} alt="loader" className="loader" />
         </div>
       ) : (
-        <div className="chat-messages">
-          {messages?.map((message) => {
+        <div className="chat-messages" id="chat-messages">
+          {messages?.map((message, index, messages) => {
+            const dateCurrentMessage = new Date(message.createAt);
+            const dateNow = new Date();
+            let isPaging = false;
+            let timeDeplay = '';
+            if (index > 0) {
+              const datePreviousMessage = new Date(messages[index - 1].createAt);
+              isPaging = dateCurrentMessage.getTime() - datePreviousMessage.getTime() >= 7200000;
+            }
+            if (isPaging) {
+              const nowDay = daysIntoYear(dateNow);
+              const currentMessageDay = daysIntoYear(dateCurrentMessage);
+              if (nowDay - currentMessageDay == 0) {
+                timeDeplay = moment(dateCurrentMessage).locale('vi').format('hh:mm');
+              } else if (nowDay - currentMessageDay > 0 && nowDay - currentMessageDay <= 7) {
+                timeDeplay = moment(dateCurrentMessage).locale('vi').format('dddd hh:mm');
+              } else {
+                timeDeplay = moment(dateCurrentMessage).locale('vi').format('hh:mm, DD MMMM YYYY');
+              }
+            }
             if (message.isFile) {
               return (
+                <>
+                  <div style={{ margin: 'auto', padding: '5px 0' }}>{isPaging && timeDeplay}</div>
+                  <div ref={scrollRef} key={uuidv4()}>
+                    <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
+                      {message.content && (
+                        <div className="content-image">
+                          <img src={`http://localhost:8081/local-store/${message.content}`} alt="sended" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+            }
+            return (
+              <>
+                <div style={{ margin: 'auto', padding: '5px 0' }}>{isPaging && timeDeplay}</div>
                 <div ref={scrollRef} key={uuidv4()}>
                   <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
                     {message.content && (
+                      <div className="content ">
+                        <p>{message.content}</p>
+                      </div>
+                    )}
+                    {message.image && (
                       <div className="content-image">
-                        <img src={`http://localhost:8081/local-store/${message.content}`} alt="sended" />
+                        <img src={message.image} alt="sended" />
                       </div>
                     )}
                   </div>
                 </div>
-              );
-            }
-            return (
-              <div ref={scrollRef} key={uuidv4()}>
-                <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
-                  {message.content && (
-                    <div className="content ">
-                      <p>{message.content}</p>
-                    </div>
-                  )}
-                  {message.image && (
-                    <div className="content-image">
-                      <img src={message.image} alt="sended" />
-                    </div>
-                  )}
-                </div>
-              </div>
+              </>
             );
           })}
         </div>
       )}
-      <ChatInput handleSendMessage={handleSendMessage} />
+      {currentChat.blocked ? (
+        <div className="blockInput">Bạn đã bị chặn</div>
+      ) : (
+        <div>
+          {currentChat.block ? (
+            <div className="blockInput">
+              Bạn đã chặn người này, để tiếp tục để trò chuyện.
+              <Button
+                onClick={() => {
+                  unblock(currentChat.topicContactId, currentChat.userFriend.id);
+                }}
+                type="link"
+              >
+                Bỏ Chặn
+              </Button>
+            </div>
+          ) : (
+            <ChatInput handleSendMessage={handleSendMessage} />
+          )}
+        </div>
+      )}
     </Container>
   );
 };
@@ -236,6 +377,13 @@ const Container = styled.div`
       width: 120px;
       height: 120px;
     }
+  }
+  .blockInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    background: var(--secondary-background-selected-color);
   }
 
   .chat-messages {

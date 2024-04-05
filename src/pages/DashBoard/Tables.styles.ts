@@ -158,4 +158,8 @@ export const TagsWrapper = styled.div`
   flex-wrap: wrap;
   gap: 0.625rem;
   padding: 0.5rem 0.25rem;
+<<<<<<< HEAD
 `;
+=======
+`;
+>>>>>>> main

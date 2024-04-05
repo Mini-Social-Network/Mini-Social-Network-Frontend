@@ -11,6 +11,32 @@ interface RecentActivityFeedProps {
   hasMore: boolean;
   next: () => void;
   unfriend: any;
+<<<<<<< HEAD
+  acpfriend: any;
+  cancelacpfriend: any;
+}
+
+const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
+  unfriend,
+  activity,
+  hasMore,
+  next,
+  acpfriend,
+  cancelacpfriend,
+}) => {
+  const activityItems = useMemo(
+    () =>
+      activity?.map((item, index) => (
+        <RecentActivityItem
+          key={index}
+          {...item.userFriend}
+          topicContactId={item.topicContactId}
+          unfriend={unfriend}
+          statusFr={item.status}
+          acpfriend={acpfriend}
+          cancelacpfriend={cancelacpfriend}
+        />
+=======
 }
 
 const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ unfriend, activity, hasMore, next }) => {
@@ -18,6 +44,7 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ unfriend, activ
     () =>
       activity.map((item, index) => (
         <RecentActivityItem key={index} {...item.userFriend} topicContactId={item.topicContactId} unfriend={unfriend} />
+>>>>>>> main
       )),
     [activity],
   );
@@ -31,7 +58,7 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ unfriend, activ
     console.log(activity);
   }, [activity]);
 
-  return activityItems.length > 0 ? (
+  return activityItems?.length > 0 ? (
     <s.FeedWrapper ref={feedRef} id="recent-activity-feed">
       <Feed hasMore={hasMore} next={next} target="recent-activity-feed">
         {activityItems}
