@@ -1,5 +1,5 @@
 # pull the base image
-FROM node:16-alpine
+FROM node:18-alpine
 
 # set the working direction
 WORKDIR /app
@@ -19,6 +19,8 @@ RUN yarn install
 
 # add app
 COPY . .
+
+EXPOSE 3000
 
 # start app
 CMD ["yarn", "start"]

@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  mini-fe:
+    image: mini-fe:latest
+    container_name: mini-fe
+    ports:
+      - "3000:3000"
+    networks:
+      - mini-social-network
+    build:
+      dockerfile: Dockerfile
+
+networks:
+  mini-social-network:
+    driver: bridge

@@ -3,7 +3,7 @@ import { TablePaginationConfig } from 'antd';
 
 export default abstract class BaseService<T> {
   // - properties
-  protected baseUri = '';
+  protected baseUri = 'http://localhost:8080';
   protected fetch = fetch;
 
   // - apis

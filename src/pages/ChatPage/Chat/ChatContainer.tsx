@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import chatService from './ChatService';
 import ChatInput from './ChatInput';
@@ -10,8 +10,6 @@ import {
   StompSessionProvider,
   useStompClient,
   useSubscription,
-  withStompClient,
-  withSubscription,
 } from 'react-stomp-hooks';
 
 import defaultAvatar from '@app/assets/DefaultAvatar.png';
@@ -28,6 +26,7 @@ interface ChatContainerProps {
   unblock: any;
   changeChat: any;
 }
+
 export interface Message {
   fromSelf: boolean;
   content: string;
@@ -60,6 +59,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<Message>();
   const [isLoading, setIsLoading] = useState(true);
+  const [latestMessageDate, setLatestMessageDate] = useState<Date | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const stompClient = useStompClient();
 
@@ -73,64 +73,78 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     );
   }
 
-  useEffect(() => {
-    const getMsg = async () => {
-      if (currentChat && currentUser) {
+  const fetchMessages = useCallback(async () => {
+    if (currentChat && currentUser) {
+      try {
+        setIsLoading(true); // Set loading to true while fetching messages
         const response = await chatService.getAllMessages(currentChat.topicContactId);
-        response.data.map((item: Message) => {
-          if (item?.user?.id === currentUser?.id) {
-            item.fromSelf = true;
-          }
-        });
-        setMessages(response.data);
+        const updatedMessages = response.data.map((item: Message) => ({
+          ...item,
+          fromSelf: item?.user?.id === currentUser?.id,
+        }));
+
+        // Check if there are new messages
+        const latestFetchedMessage = updatedMessages[updatedMessages.length - 1];
+        setMessages(updatedMessages);
+        setLatestMessageDate(new Date(latestFetchedMessage.createAt));
+      } catch (error) {
+        console.error('Failed to fetch messages', error);
       }
       setIsLoading(false);
-    };
-    getMsg();
-    //
-  }, [currentChat, currentChat._id, currentUser]);
+    }
+  }, [currentChat, currentUser]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const elem = document.getElementById('chat-messages');
-      if (elem) elem.scrollTop = elem.scrollHeight;
-    }, 100);
+    fetchMessages();
+  }, [fetchMessages, currentChat]);
+
+  const fetchNewMessages = useCallback(async () => {
+    if (currentChat && currentUser && latestMessageDate) {
+      try {
+        const response = await chatService.getNewMessages(currentChat.topicContactId, latestMessageDate);
+        const newMessages = response.data.map((item: Message) => ({
+          ...item,
+          fromSelf: item?.user?.id === currentUser?.id,
+        }));
+
+        if (newMessages.length > 0) {
+          setMessages((prev) => [...prev, ...newMessages]);
+          setLatestMessageDate(new Date(newMessages[newMessages.length - 1].createAt));
+        }
+      } catch (error) {
+        console.error('Failed to fetch new messages', error);
+      }
+    }
+  }, [currentChat, currentUser, latestMessageDate]);
+
+  useEffect(() => {
+    const interval = setInterval(fetchNewMessages, 3000); // Fetch new messages every 1 second
+    return () => clearInterval(interval);
+  }, [fetchNewMessages]);
+
+  useEffect(() => {
+    const elem = document.getElementById('chat-messages');
+    if (elem) elem.scrollTop = elem.scrollHeight;
   }, [messages, currentChat]);
 
   useSubscription(`/topic/chat/${currentChat.topicContactId}`, (message: any) => {
     const body = JSON.parse(message.body);
-    console.log(body, parseInt(body?.data ? body?.data : 0), currentUser?.id);
     if (body.status === 1) {
-      if (body?.data?.isFile) {
-        setArrivalMessage({
-          fromSelf: body.data.user.id === currentUser?.id ? true : false,
-          content: '',
-          image: `http://localhost:8081/local-store/${body.data.content}`,
-          user: body.data.user.id,
-          isFile: true,
-          createAt: new Date()
-        });
-      } else {
-        setArrivalMessage({
-          fromSelf: body.data.user.id === currentUser?.id ? true : false,
-          content: body.data.content as string,
-          user: body.data.user.id,
-          isFile: true,
-          createAt: new Date()
-        });
-      }
-      const data = currentChat;
-      data.blocked = false;
-      changeChat(data);
-    } else {
-      if ((body?.data ? body?.data : 0) === currentUser?.id) {
-        const data = currentChat;
-        data.blocked = true;
-        changeChat(data);
-        notificationController.success({ message: 'Bạn đã bị chặn' });
-      }
+      setArrivalMessage({
+        fromSelf: body.data.user.id === currentUser?.id,
+        content: body.data.isFile ? '' : body.data.content,
+        image: body.data.isFile ? `http://localhost:8081/local-store/${body.data.content}` : undefined,
+        user: body.data.user,
+        isFile: body.data.isFile,
+        createAt: new Date(),
+      });
+      changeChat({ ...currentChat, blocked: false });
+    } else if (body.data === currentUser?.id) {
+      changeChat({ ...currentChat, blocked: true });
+      notificationController.success({ message: 'Bạn đã bị chặn' });
     }
   });
+
   useEffect(() => {
     if (socket.current) {
       socket.current.on('msg-recieve', (msg: string) => {
@@ -140,41 +154,36 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   }, [socket]);
 
   useEffect(() => {
-    arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
+    if (arrivalMessage) {
+      setMessages((prev) => [...prev, arrivalMessage]);
+      setLatestMessageDate(new Date(arrivalMessage.createAt));
+    }
   }, [arrivalMessage]);
 
   useEffect(() => {
-    (scrollRef.current as HTMLDivElement).scrollIntoView({ behavior: 'smooth' });
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
 
-  const handleSendMessage = async (msg: string, image: string) => {
-    console.log(image, msg);
-    handleChatUpdate(true);
-    if (currentUser) {
-      if (stompClient) {
-        //Send Message
-        if (image === '' || image === null) {
-          stompClient.publish({
-            destination: '/app/chat/' + currentChat.topicContactId,
-            body: JSON.stringify({
-              userId: currentUser.id,
-              content: msg,
-              chatParent: null,
-              isFile: false,
-            }),
-          });
-        } else {
-          console.log(JSON.stringify({ userId: currentUser.id, content: image, chatParent: null, isFile: true }));
-          stompClient.publish({
-            destination: '/app/chat/' + currentChat.topicContactId,
-            body: JSON.stringify({ userId: currentUser.id, content: image, chatParent: null, isFile: Boolean(true) }),
-          });
-        }
+  const handleSendMessage = useCallback(
+    async (msg: string, image: string) => {
+      handleChatUpdate(true);
+      if (currentUser && stompClient) {
+        const messageBody = {
+          userId: currentUser.id,
+          content: image || msg,
+          chatParent: null,
+          isFile: Boolean(image),
+        };
+        stompClient.publish({
+          destination: `/app/chat/${currentChat.topicContactId}`,
+          body: JSON.stringify(messageBody),
+        });
       }
-    }
-
-    //setMessages((msgs) => [...msgs, { fromSelf: true, content: msg, image, user: currentUser }]);
-  };
+    },
+    [currentUser, currentChat, stompClient, handleChatUpdate]
+  );
 
   return (
     <Container>
@@ -182,40 +191,27 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         <div className="user-details">
           <div className="avatar">
             <img
-              src={
-                currentChat?.userFriend?.imageUrl
-                  ? `http://localhost:8081/local-store/${currentChat?.userFriend?.imageUrl}`
-                  : defaultAvatar
-              }
+              src={currentChat?.userFriend?.imageUrl ? `http://localhost:8081/local-store/${currentChat?.userFriend?.imageUrl}` : defaultAvatar}
               alt="current Chat avatar"
+              onError={(e) => {
+                e.currentTarget.src = defaultAvatar;
+              }}
             />
           </div>
           <div className="username">
             <h3>{currentChat?.userFriend?.name}</h3>
           </div>
-          {currentChat.blocked ? (
-            <div className="Block" />
-          ) : (
-            <div className="Block">
-              {currentChat.block ? (
-                <Button
-                  onClick={() => {
-                    unblock(currentChat.topicContactId, currentChat.userFriend.id);
-                  }}
-                >
-                  Bỏ Chặn
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => {
-                    block(currentChat.topicContactId, currentChat.userFriend.id);
-                  }}
-                >
-                  Chặn
-                </Button>
-              )}
-            </div>
-          )}
+          <div className="Block">
+            {currentChat.block ? (
+              <Button onClick={() => unblock(currentChat.topicContactId, currentChat.userFriend.id)}>
+                Bỏ Chặn
+              </Button>
+            ) : (
+              <Button onClick={() => block(currentChat.topicContactId, currentChat.userFriend.id)}>
+                Chặn
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       {isLoading ? (
@@ -224,7 +220,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         </div>
       ) : (
         <div className="chat-messages" id="chat-messages">
-          {messages?.map((message, index, messages) => {
+          {messages.map((message, index, messages) => {
             const dateCurrentMessage = new Date(message.createAt);
             const dateNow = new Date();
             let isPaging = false;
@@ -236,7 +232,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
             if (isPaging) {
               const nowDay = daysIntoYear(dateNow);
               const currentMessageDay = daysIntoYear(dateCurrentMessage);
-              if (nowDay - currentMessageDay == 0) {
+              if (nowDay - currentMessageDay === 0) {
                 timeDeplay = moment(dateCurrentMessage).locale('vi').format('hh:mm');
               } else if (nowDay - currentMessageDay > 0 && nowDay - currentMessageDay <= 7) {
                 timeDeplay = moment(dateCurrentMessage).locale('vi').format('dddd hh:mm');
@@ -244,64 +240,37 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                 timeDeplay = moment(dateCurrentMessage).locale('vi').format('hh:mm, DD MMMM YYYY');
               }
             }
-            if (message.isFile) {
-              return (
-                <>
-                  <div style={{ margin: 'auto', padding: '5px 0' }}>{isPaging && timeDeplay}</div>
-                  <div ref={scrollRef} key={uuidv4()}>
-                    <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
-                      {message.content && (
-                        <div className="content-image">
-                          <img src={`http://localhost:8081/local-store/${message.content}`} alt="sended" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              );
-            }
             return (
-              <>
-                <div style={{ margin: 'auto', padding: '5px 0' }}>{isPaging && timeDeplay}</div>
-                <div ref={scrollRef} key={uuidv4()}>
+              <React.Fragment key={uuidv4()}>
+                {isPaging && <div style={{ margin: 'auto', padding: '5px 0' }}>{timeDeplay}</div>}
+                <div ref={scrollRef}>
                   <div className={`message ${message.fromSelf ? 'sended' : 'recieved'}`}>
-                    {message.content && (
-                      <div className="content ">
+                    {message.content && !message.isFile && (
+                      <div className="content">
                         <p>{message.content}</p>
                       </div>
                     )}
-                    {message.image && (
+                    {message.isFile && (
                       <div className="content-image">
-                        <img src={message.image} alt="sended" />
+                        <img
+                          src={`http://localhost:8081/local-store/${message.content}`}
+                          alt="sended"
+                          onError={(e) => {
+                            e.currentTarget.src = defaultAvatar;
+                          }}
+                        />
                       </div>
                     )}
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </div>
       )}
-      {currentChat.blocked ? (
-        <div className="blockInput">Bạn đã bị chặn</div>
-      ) : (
-        <div>
-          {currentChat.block ? (
-            <div className="blockInput">
-              Bạn đã chặn người này, để tiếp tục để trò chuyện.
-              <Button
-                onClick={() => {
-                  unblock(currentChat.topicContactId, currentChat.userFriend.id);
-                }}
-                type="link"
-              >
-                Bỏ Chặn
-              </Button>
-            </div>
-          ) : (
-            <ChatInput handleSendMessage={handleSendMessage} />
-          )}
-        </div>
+      {currentChat.blocked && <div className="blockInput">Bạn đã bị chặn</div>}
+      {!currentChat.blocked && (
+        <ChatInput handleSendMessage={handleSendMessage} />
       )}
     </Container>
   );
@@ -309,121 +278,97 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 80% 10%;
-  /* gap: 0.1rem; */
+  grid-template-rows: 10% 78% 12;
+  gap: 0.1rem;
   overflow: hidden;
-  border-left: 1px black solid;
+  background-color: white;
+  border-left: 1px solid #d3d3d3;
+  @media screen and (min-width: 720px) and (max-width: 1080px) {
+    grid-auto-rows: 15% 70% 15%;
+  }
   .chat-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
-    border-bottom: 1px solid #ffffff15;
-    -webkit-box-shadow: 0px 17px 20px -26px rgba(66, 68, 90, 1);
-    -moz-box-shadow: 0px 17px 20px -26px rgba(66, 68, 90, 1);
-    box-shadow: 0px 17px 20px -26px rgba(66, 68, 90, 1);
+    padding: 0.2rem 2rem;
+    border-bottom: 1px black solid;
     .user-details {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      .avatar {
-        img {
-          height: 3.1rem;
-        }
-      }
-      .username {
-        h3 {
-          color: var(--text-main-color);
-        }
-      }
-    }
-    @media screen and (min-width: 720px) {
       .avatar {
         img {
           height: 3rem;
         }
       }
+      .username {
+        h3 {
+          color: black;
+        }
+      }
+    }
+    .Block {
+      margin-left: auto;
     }
   }
-
-  .loading-messages {
-    text-align: center;
-    margin-top: 35vh;
-    img {
-      width: 120px;
-      height: 120px;
-    }
-  }
-  .blockInput {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    background: var(--secondary-background-selected-color);
-  }
-
   .chat-messages {
     padding: 1rem 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     overflow: auto;
-    &::-webkit-scrollbar {
-      width: 0.2rem;
-      &-thumb {
-        background-color: #ffffff39;
-        width: 0.1rem;
-        border-radius: 1rem;
-      }
-    }
     .message {
       display: flex;
       align-items: center;
       .content {
-        max-width: 70%;
+        max-width: 40%;
         overflow-wrap: break-word;
         padding: 1rem;
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         border-radius: 1rem;
-        color: #d1d1d1;
-        @media screen and (min-width: 720px) {
-          max-width: 50%;
-          font-size: 1.1rem;
+        color: black;
+      }
+      &.sended {
+        justify-content: flex-end;
+        .content {
+          background-color: #9a86f3;
+          color: white;
         }
-      }
-      .content-image {
-        max-width: 70%;
-        /* justify-self: flex-end; */
-        img {
-          max-width: 300px;
-        }
-      }
-    }
-    .sended {
-      justify-content: flex-end;
-      .content {
-        background-color: rgb(255, 82, 161);
-      }
-    }
-    .recieved {
-      justify-content: flex-start;
-      .content {
-        background-color: rgb(0, 135, 255);
-      }
-    }
-  }
-  @media screen and (max-width: 900px) and (orientation: landscape) {
-    grid-template-rows: 15% 70% 15%;
-
-    .chat-header {
-      .user-details {
-        .avatar {
+        .content-image {
           img {
-            height: 2.6rem;
+            width: 300px;
+            height: auto;
+            border-radius: 1rem;
+          }
+        }
+      }
+      &.recieved {
+        justify-content: flex-start;
+        .content {
+          background-color: #ececec;
+        }
+        .content-image {
+          img {
+            width: 300px;
+            height: auto;
+            border-radius: 1rem;
           }
         }
       }
     }
+  }
+  .loading-messages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    .loader {
+      width: 50px;
+    }
+  }
+  .blockInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
   }
 `;
 

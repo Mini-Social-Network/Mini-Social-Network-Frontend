@@ -165,6 +165,7 @@ export const ListFriendItem: React.FC<Activity> = ({
             type={isSubcribed ? 'default' : 'primary'}
             onClick={() => {
               subexpert(id);
+              setIsSubcribed(true);
             }}
           >
             {isSubcribed ? t('mini.unsub') : t('mini.sub')}

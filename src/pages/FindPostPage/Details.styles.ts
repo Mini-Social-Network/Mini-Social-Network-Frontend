@@ -127,7 +127,6 @@ export const Author = styled.div`
 `;
 
 export const ImageWrap = styled.div`
-  width: 53rem;
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -137,7 +136,6 @@ export const ImageWrap2 = styled.div`
   width: 53.9rem;
   display: flex;
   justify-content: center;
-
   height: 30rem;
 `;
 
