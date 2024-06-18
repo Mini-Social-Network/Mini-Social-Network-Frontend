@@ -73,6 +73,13 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     );
   }
 
+  // Effect to scroll to bottom when component mounts
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, []);
+
   const fetchMessages = useCallback(async () => {
     if (currentChat && currentUser) {
       try {
@@ -118,14 +125,17 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   }, [currentChat, currentUser, latestMessageDate]);
 
   useEffect(() => {
-    const interval = setInterval(fetchNewMessages, 3000); // Fetch new messages every 1 second
+    const interval = setInterval(fetchNewMessages, 2000); // Fetch new messages every 1 second
     return () => clearInterval(interval);
   }, [fetchNewMessages]);
 
   useEffect(() => {
-    const elem = document.getElementById('chat-messages');
-    if (elem) elem.scrollTop = elem.scrollHeight;
-  }, [messages, currentChat]);
+    if (!isLoading) {
+      const elem = document.getElementById('chat-messages');
+      if (elem) elem.scrollTop = elem.scrollHeight;
+    }
+  }, [messages, isLoading]);
+  
 
   useSubscription(`/topic/chat/${currentChat.topicContactId}`, (message: any) => {
     const body = JSON.parse(message.body);

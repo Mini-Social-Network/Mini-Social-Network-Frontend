@@ -18,6 +18,13 @@ class ChatService extends BaseService<any> {
     };
     return this.fetch.post(`/chat/external/getNewChat`, data);
   }
+  public getOlderMessages(topicId: string, lastMessageDate: Date) {
+    const data = {
+      topicId: topicId,
+      toDate: lastMessageDate.toISOString(),
+    };
+    return this.fetch.post(`/chat/external/getOlderChat`, data);
+  }
   public block(topicId: string, userBlockId: string) {
     const data = {
       topicId: topicId,
