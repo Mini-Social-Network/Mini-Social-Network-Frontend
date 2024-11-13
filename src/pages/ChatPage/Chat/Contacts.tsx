@@ -154,7 +154,7 @@ const Container = styled.div`
         flex-direction: row;
         justify-content: flex-start;
 
-        padding: 0.4rem;
+        padding: 1.1rem;
         gap: 1rem;
         .username {
           h3 {
